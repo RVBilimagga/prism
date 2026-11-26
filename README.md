@@ -1,17 +1,63 @@
-# Prism
+<p align="center">
+  <img src="docs/assets/banner.svg" alt="Prism: from stakeholder interview to requirements an auditor can trace" width="100%">
+</p>
 
-**Agentic requirements engineering and SDLC-model recommendation for financial services.**
+<p align="center">
+  <img alt="Python 3.11+" src="https://img.shields.io/badge/Python-3.11%2B-2563eb?style=flat-square&labelColor=0a1530">
+  <img alt="React 19" src="https://img.shields.io/badge/React-19-38bdf8?style=flat-square&labelColor=0a1530">
+  <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-backend-2563eb?style=flat-square&labelColor=0a1530">
+  <img alt="Runs offline" src="https://img.shields.io/badge/Runs-offline%20with%20Ollama-38bdf8?style=flat-square&labelColor=0a1530">
+  <img alt="Human in the loop" src="https://img.shields.io/badge/Human-in%20the%20loop-2563eb?style=flat-square&labelColor=0a1530">
+</p>
 
-Prism turns a stakeholder interview into reviewed, policy-mapped,
-risk-assessed requirements. It recommends a delivery model for the project and
-generates the supporting documentation. Nothing becomes final until a person
-accepts it.
+<p align="center">
+  <b>Prism</b> turns a stakeholder interview into reviewed, policy-mapped,
+  risk-assessed requirements, recommends a delivery model, and generates the
+  supporting documents.<br>
+  Nothing becomes final until a person accepts it.
+</p>
+
+<p align="center">
+  <a href="#quick-start">Quick start</a> ·
+  <a href="#screenshots">Screenshots</a> ·
+  <a href="#how-it-works">How it works</a> ·
+  <a href="#security-and-governance">Security</a> ·
+  <a href="docs/SDLC.md">How it was built</a>
+</p>
 
 > The web UI is branded *Prism*. The Python package, CLI and `FINREQ_*`
 > environment variables keep the project's original name, **FinReq**.
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/assets/start.png" alt="Prism start screen: paste an interview, pick a model backend, and watch the pipeline stages" width="100%">
+</p>
+
+<table>
+  <tr>
+    <td width="50%"><b>Review.</b> Evidence trace per requirement: the stakeholder's words, policy evidence, automated checks and risk.<br><br>
+      <picture>
+        <source media="(prefers-color-scheme: light)" srcset="docs/assets/review-light.png">
+        <img src="docs/assets/review.png" alt="Review step with requirement list and evidence inspector">
+      </picture>
+    </td>
+    <td width="50%"><b>Delivery model.</b> Ranked SDLC models with an explainable score and four role sign-offs.<br><br>
+      <img src="docs/assets/delivery.png" alt="Delivery model step with ranked SDLC models and sign-offs">
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2"><b>Export.</b> SRS, user stories, traceability, compliance and risk documents as one zip, with the full audit trail.<br><br>
+      <img src="docs/assets/export.png" alt="Export step listing generated artefacts" width="50%">
+    </td>
+  </tr>
+</table>
+
+Light and dark themes follow the system setting.
+
 ## Contents
 
+- [Screenshots](#screenshots)
 - [Overview](#overview)
 - [How it works](#how-it-works)
 - [Quick start](#quick-start)
