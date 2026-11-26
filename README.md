@@ -32,14 +32,14 @@
 
 <table>
   <tr>
-    <td width="33%"><b>🔎 Traceable</b><br>Every requirement links back to the stakeholder's words, the policy evidence behind it and its risk score.</td>
-    <td width="33%"><b>🧑‍⚖️ Human in the loop</b><br>Only an explicit accept, reject or edit changes status. The SDLC choice needs four role sign-offs.</td>
-    <td width="33%"><b>🔒 Private by design</b><br>PII is masked before any model call. Runs fully offline with a local Ollama model.</td>
+    <td width="33%"><img src="docs/assets/icons/search.svg" width="24" alt=""><br><b>Traceable</b><br>Every requirement links back to the stakeholder's words, the policy evidence behind it and its risk score.</td>
+    <td width="33%"><img src="docs/assets/icons/user-check.svg" width="24" alt=""><br><b>Human in the loop</b><br>Only an explicit accept, reject or edit changes status. The SDLC choice needs four role sign-offs.</td>
+    <td width="33%"><img src="docs/assets/icons/lock.svg" width="24" alt=""><br><b>Private by design</b><br>PII is masked before any model call. Runs fully offline with a local Ollama model.</td>
   </tr>
   <tr>
-    <td><b>⚖️ Explainable</b><br>Quality, conflict, risk and SDLC ranking are plain rules, so an audit can reproduce them.</td>
-    <td><b>🧾 Fully audited</b><br>Every model call, retrieval, decision and sign-off is recorded.</td>
-    <td><b>📦 Ready documents</b><br>SRS, user stories, traceability and compliance matrices, risk register and SDLC plan.</td>
+    <td><img src="docs/assets/icons/scale.svg" width="24" alt=""><br><b>Explainable</b><br>Quality, conflict, risk and SDLC ranking are plain rules, so an audit can reproduce them.</td>
+    <td><img src="docs/assets/icons/scroll-text.svg" width="24" alt=""><br><b>Fully audited</b><br>Every model call, retrieval, decision and sign-off is recorded.</td>
+    <td><img src="docs/assets/icons/package.svg" width="24" alt=""><br><b>Ready documents</b><br>SRS, user stories, traceability and compliance matrices, risk register and SDLC plan.</td>
   </tr>
 </table>
 
