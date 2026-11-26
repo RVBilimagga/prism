@@ -28,6 +28,21 @@
 > The web UI is branded *Prism*. The Python package, CLI and `FINREQ_*`
 > environment variables keep the project's original name, **FinReq**.
 
+## Highlights
+
+<table>
+  <tr>
+    <td width="33%"><b>🔎 Traceable</b><br>Every requirement links back to the stakeholder's words, the policy evidence behind it and its risk score.</td>
+    <td width="33%"><b>🧑‍⚖️ Human in the loop</b><br>Only an explicit accept, reject or edit changes status. The SDLC choice needs four role sign-offs.</td>
+    <td width="33%"><b>🔒 Private by design</b><br>PII is masked before any model call. Runs fully offline with a local Ollama model.</td>
+  </tr>
+  <tr>
+    <td><b>⚖️ Explainable</b><br>Quality, conflict, risk and SDLC ranking are plain rules, so an audit can reproduce them.</td>
+    <td><b>🧾 Fully audited</b><br>Every model call, retrieval, decision and sign-off is recorded.</td>
+    <td><b>📦 Ready documents</b><br>SRS, user stories, traceability and compliance matrices, risk register and SDLC plan.</td>
+  </tr>
+</table>
+
 ## Screenshots
 
 <p align="center">
@@ -57,6 +72,7 @@ Light and dark themes follow the system setting.
 
 ## Contents
 
+- [Highlights](#highlights)
 - [Screenshots](#screenshots)
 - [Overview](#overview)
 - [How it works](#how-it-works)
@@ -89,12 +105,23 @@ A fixed-order pipeline coordinates specialised agents. Judgments that must be
 explainable and reproducible for an audit are rule-based. Language tasks use a
 model.
 
+```mermaid
+flowchart LR
+    T([Transcript]) --> M[Mask PII]
+    M --> I[Interaction*] --> E[Extraction*] --> C[Classification*]
+    C --> Q[Quality] --> X[Conflict] --> P[Compliance*]
+    P --> S[Security] --> R[Risk] --> V[Validation]
+    V --> U[Unmask and persist] --> H{{Human review}}
+    H --> D[SDLC selection] --> A([Artefacts])
+    classDef llm fill:#eef4ff,stroke:#2563eb,color:#0a1530;
+    classDef rule fill:#f5f6f8,stroke:#cfd4dc,color:#0a1530;
+    classDef human fill:#0a1530,stroke:#38bdf8,color:#ffffff;
+    class I,E,C,P llm;
+    class M,Q,X,S,R,V,U,D rule;
+    class H human;
 ```
-transcript → mask PII → interaction* → extraction* → classification*
-           → quality → conflict → compliance* → security → risk → validation
-           → unmask → persist → human review → SDLC selection → artefacts
-                                                   (* = LLM agent)
-```
+
+<sub>Blue nodes (*) are LLM agents. Grey nodes are rule-based.</sub>
 
 | Agent | Type | Responsibility |
 |---|---|---|
@@ -182,7 +209,18 @@ Use `--backend gemini|groq|ollama` and `--model <name>` to select the LLM.
 | `FINREQ_DB_PATH` | SQLite database holding all analyses | `finreq.db` |
 | `GEMINI_API_KEY`, `GROQ_API_KEY` | API credentials (environment only) | none |
 
-Measured model comparisons and free-tier rate-limit behaviour are in
+### Measured model results
+
+Live extraction eval on the loan-officer fixture. Each row is one run, and
+small models vary between runs.
+
+| Model | Precision | Recall | F1 | Policy coverage | Time |
+|---|---|---|---|---|---|
+| `qwen2.5:3b-instruct` (default) | 0.90 | 0.56 | 0.69 | 1.0 | 81 s |
+| `hhao/qwen2.5-coder-tools:7b` | 0.80 | 0.75 | 0.77 | 0.5 | 211 s |
+
+Use the default for iteration and demos. Use the 7B model when recall matters
+more than time. Free-tier rate-limit behaviour is in
 [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Project layout
