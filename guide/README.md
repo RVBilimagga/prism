@@ -479,7 +479,6 @@ The full record is in [docs/SDLC.md](../docs/SDLC.md): the choice and its eviden
 ## Further reading
 
 - [../README.md](../README.md): setup, use and the command list.
-- [../ARCHITECTURE.md](../ARCHITECTURE.md): architecture, measured model results and known limitations.
 - [../DESIGN.md](../DESIGN.md): the Prism design system (tokens, themes, flow and motion).
 - [../docs/SDLC.md](../docs/SDLC.md): how Prism was built, with its sprint log and pipeline gates.
 - [../requirements.txt](../backend/requirements.txt) and [../requirements-dev.txt](../backend/requirements-dev.txt): Python dependencies.

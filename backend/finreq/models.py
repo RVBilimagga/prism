@@ -1,7 +1,7 @@
 """Core data structures shared by every agent and by storage/artifacts.
 
 These follow the requirement record shape from the problem statement
-(docs/../ARCHITECTURE.md -> "Requirement record"): every field the spec asks for is
+(problem_statement.txt, "Requirement record"): every field the spec asks for is
 represented, plus the traceability link back to the stakeholder statement.
 """
 from __future__ import annotations

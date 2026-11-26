@@ -220,8 +220,7 @@ small models vary between runs.
 | `hhao/qwen2.5-coder-tools:7b` | 0.80 | 0.75 | 0.77 | 0.5 | 211 s |
 
 Use the default for iteration and demos. Use the 7B model when recall matters
-more than time. Free-tier rate-limit behaviour is in
-[ARCHITECTURE.md](ARCHITECTURE.md).
+more than time. Free-tier keys are rate limited, so a full analysis can take minutes.
 
 ## Project layout
 
@@ -284,11 +283,8 @@ rest and session isolation.
   this.
 - Free-tier API keys are rate limited. A full analysis can take minutes.
 
-The full list is in [ARCHITECTURE.md](ARCHITECTURE.md#known-limitations-found-via-real-runs-not-hypothetical).
-
 ## Further reading
 
-- [ARCHITECTURE.md](ARCHITECTURE.md): architecture, model measurements and constraints
 - [DESIGN.md](DESIGN.md): the UI design system
 - [docs/SDLC.md](docs/SDLC.md): how the project itself was built
 - [guide/](guide/): code map, flowcharts and interactive explainer

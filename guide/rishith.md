@@ -12,7 +12,6 @@ Line links use `#L<n>`, which works in the VS Code markdown preview and on GitHu
 
 | Link | What it does |
 |---|---|
-| [ARCHITECTURE.md](../ARCHITECTURE.md) | Commands, architecture and constraints for working in this repo |
 | [README.md](../README.md) | Project overview and how to run the app |
 | [DESIGN.md](../DESIGN.md) | Prism design system: tokens, themes, flow, motion |
 | [pipeline.py:59 — run_pipeline](../backend/finreq/pipeline.py#L59) | The orchestrator. Every agent runs from here, in order |
@@ -230,5 +229,4 @@ Line links use `#L<n>`, which works in the VS Code markdown preview and on GitHu
 | [data/fixtures/loan_officer_interview.txt](../backend/data/fixtures/loan_officer_interview.txt) | Sample stakeholder transcript used by the CLI and tests |
 | [data/fixtures/problem_statement.txt](../backend/data/fixtures/problem_statement.txt) | Text copy of the problem statement |
 | [eval/gold_requirements.json](../backend/eval/gold_requirements.json) | Gold requirements the live eval scores against |
-| [ARCHITECTURE.md](../ARCHITECTURE.md) | Project instructions |
 | [DESIGN.md](../DESIGN.md) | Front-end design system |

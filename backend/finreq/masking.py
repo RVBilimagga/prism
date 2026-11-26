@@ -8,7 +8,7 @@ mapping so a human-approval UI can show real values again without ever
 sending them to the model.
 
 This is a prototype-grade regex classifier, not a production PII scanner —
-documented as such in the ARCHITECTURE.md security-controls section.
+documented as such in the README's security section.
 """
 from __future__ import annotations
 

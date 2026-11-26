@@ -80,7 +80,7 @@ one lives in this repository.
 
 - Scope comes from the problem statement. The first increment covers one
   use case (loan origination), as the statement recommends.
-- Risks are tracked in the "Known limitations" section of `ARCHITECTURE.md`.
+- Risks are tracked in the "Known limitations" section of the README (Limitations).
   Each entry records a risk found in a real run and how it was handled.
 
 ### Sprints (repeated each iteration)
@@ -138,7 +138,7 @@ release tag; that needs the team's sign-offs first.
   detection quality drops below today's level.
 - **Model monitoring.** `python backend/eval/evaluate.py --live` re-measures
   extraction quality against the gold set. Results for each model are in
-  `ARCHITECTURE.md`.
+  the README.
 
 ## 3. Security practices (the "Sec" in DevSecOps)
 

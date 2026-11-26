@@ -10,8 +10,7 @@ store, so GET /api/analyses (the front end's project list) survives a
 restart. Everything else is a thin
 wrapper over the same functions cli.py and the tests use.
 
-The Gemini key is read from this process's environment only (see
-ARCHITECTURE.md); no route accepts or returns it.
+The Gemini key is read from this process's environment only (see the README); no route accepts or returns it.
 """
 from __future__ import annotations
 

@@ -18,7 +18,7 @@ import sys
 
 BACKEND = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT = os.path.dirname(BACKEND)
-# Credential shapes that must never be committed (see ARCHITECTURE.md "Credential handling").
+# Credential shapes that must never be committed (see the README, Security and governance).
 SECRET_PATTERNS = [
     r"AIza[0-9A-Za-z_\-]{35}",               # Google API key
     r"\bAQ\.[0-9A-Za-z_\-]{30,}",             # Google OAuth-style access token

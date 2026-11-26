@@ -22,7 +22,6 @@ $relative = @(
     'guide/flowchart.md',
     'guide/README.md',
     'README.md',
-    'ARCHITECTURE.md',
     'DESIGN.md',
     'docs/SDLC.md',
     'backend/finreq/pipeline.py',

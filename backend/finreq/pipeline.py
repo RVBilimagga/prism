@@ -8,8 +8,7 @@ writes every requirement, risk and audit event to storage before handing
 back to whatever's asking (CLI, API, tests).
 
 SDLC selection and generation are intentionally NOT part of this pipeline
-yet — deferred per project decision until an SDLC approach is chosen; see
-ARCHITECTURE.md.
+yet — deferred per project decision until an SDLC approach is chosen.
 """
 from __future__ import annotations
 

@@ -34,7 +34,7 @@ class Settings:
     # modest hardware (fits in ~2-4GB VRAM) while still following JSON-shaped
     # instructions reliably — swapped in from the 7B default after measuring
     # the 7B model's per-run time in eval/results/eval_report.md; see
-    # ARCHITECTURE.md's "Model choice" note for the speed/quality tradeoff.
+    # the README's measured model results for the speed/quality tradeoff.
     model: str = os.environ.get("FINREQ_MODEL", "qwen2.5:3b-instruct")
 
     # Larger fallback model, used nowhere by default today but kept
