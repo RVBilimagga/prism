@@ -1,0 +1,60 @@
+Interview with: Priya Nair, Senior Loan Officer, Retail Lending
+Topic: New digital personal-loan origination system
+
+Priya: The main goal here is to let a customer apply for a personal loan
+entirely online and get a decision the same day, instead of the current
+process where a branch officer manually checks everything and it takes
+three to five business days.
+
+Before we even show the application form, the customer has to complete
+KYC. If their government ID and address proof don't match our records, or
+if they've failed the automated ID check twice already, we cannot let them
+submit a loan application — that has to go to manual review by someone on
+the compliance team.
+
+Once KYC is done, the customer fills in the loan amount, tenure, and
+purpose. We run a credit check and an affordability calculation
+automatically. If the requested amount is under our auto-approval limit
+and the applicant's risk score is good, the system should approve it
+without a human ever looking at it. Above that limit, or if the fraud
+model flags anything unusual, a credit officer has to review it manually
+and can override the system's recommendation — but they have to write down
+why, we can't just let someone silently overrule the model.
+
+If we reject an application, the customer needs to actually be told why in
+writing before we finalize things — we can't just say "declined." That's
+partly a regulatory thing, partly just fair treatment.
+
+On the money side: once approved, the loan amount has to go directly into
+the bank account that's registered in the applicant's own name — we've had
+issues in the past with disbursing into someone else's account by
+accident, so I want that hard blocked, no exceptions, not even for
+"family member" requests.
+
+For security, my counterpart in InfoSec told me that any change to a
+customer's registered bank account or phone number should require the
+customer to re-verify with a second factor, and both the old and new
+contact method should get notified. Also, anyone who is a politically
+exposed person needs extra sign-off from compliance before we can even
+onboard them — that can't be automatic.
+
+We also need an audit trail. For every application, I want to be able to
+go back later and see exactly what data was used, what the credit model
+decided, and who — human or system — approved or rejected it, with a
+timestamp. Our regulator has asked us for this more than once during
+inspections.
+
+On performance: the credit decision itself should come back to the
+customer in under five seconds for the auto-approved path. Manual review
+cases obviously take longer, that's fine, but customers should at least
+see their application status update within a minute of a reviewer taking
+an action.
+
+Data-wise, we keep completed loan records for at least seven years for
+audit purposes, even if the customer later asks us to delete their data —
+we just have to be upfront that the loan record itself is retained
+separately.
+
+Lastly, we want this to plug into our existing core banking system for
+disbursement and our existing CRM for customer records — we don't want a
+totally separate database of customers.

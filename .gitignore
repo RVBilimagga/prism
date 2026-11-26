@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+*.db
+out/
+eval/results/
+.venv/
+venv/
+*.egg-info/
+.env
+.playwright-mcp/

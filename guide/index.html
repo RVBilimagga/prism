@@ -1,0 +1,1303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prism Project Guide</title>
+<meta name="description" content="Guide to Prism (repo and package name FinReq): an agentic, multi-agent LLM system for requirements engineering and SDLC model recommendation in financial services.">
+<script>
+  /* Apply a saved theme before first paint. Safe if storage is blocked. */
+  (function () {
+    try {
+      var saved = localStorage.getItem("prism-guide-theme");
+      if (saved === "light" || saved === "dark") {
+        document.documentElement.setAttribute("data-theme", saved);
+      }
+    } catch (e) { /* storage unavailable: follow the system theme */ }
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Tokens (mirror frontend/src/index.css and DESIGN.md v3) ---------- */
+  :root {
+    color-scheme: light;
+    --ink: #0a1530;
+    --ink-foreground: #ffffff;
+    --ink-muted: #b6bccb;
+    --brand: #2563eb;
+    --hero-accent: #7dd3fc;
+    --signal: #38bdf8;
+    --background: #f5f6f8;
+    --foreground: #0f172a;
+    --card: #ffffff;
+    --primary: #2563eb;
+    --primary-soft: #eef4ff;
+    --muted: #eef0f4;
+    --muted-foreground: #475569;
+    --subtle-foreground: #5b6577;
+    --border: #e3e6ec;
+    --border-strong: #cfd4dc;
+    --success: #047857;
+    --success-soft: #ecfdf5;
+    --success-border: #a7f3d0;
+    --warning: #b45309;
+    --warning-soft: #fffbeb;
+    --warning-border: #fde68a;
+    --danger: #b91c1c;
+    --danger-soft: #fef2f2;
+    --danger-border: #fecaca;
+    --radius: 0.625rem;
+    --elev-panel: 0 0 0 1px rgb(15 23 42 / 0.06), 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -6px rgb(15 23 42 / 0.10);
+    --font-sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --background: #080e1f;
+      --foreground: #e8ecf5;
+      --card: #0f1830;
+      --primary: #60a5fa;
+      --primary-soft: #132447;
+      --muted: #16213d;
+      --muted-foreground: #a9b3c9;
+      --subtle-foreground: #8e99b3;
+      --border: #1f2c4b;
+      --border-strong: #2c3b5f;
+      --success: #34d399;
+      --success-soft: #0b2a24;
+      --success-border: #14532d;
+      --warning: #fbbf24;
+      --warning-soft: #2a2007;
+      --warning-border: #713f12;
+      --danger: #f87171;
+      --danger-soft: #2d1218;
+      --danger-border: #7f1d1d;
+      --elev-panel: 0 0 0 1px rgb(255 255 255 / 0.06), 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -6px rgb(0 0 0 / 0.45);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --background: #080e1f;
+    --foreground: #e8ecf5;
+    --card: #0f1830;
+    --primary: #60a5fa;
+    --primary-soft: #132447;
+    --muted: #16213d;
+    --muted-foreground: #a9b3c9;
+    --subtle-foreground: #8e99b3;
+    --border: #1f2c4b;
+    --border-strong: #2c3b5f;
+    --success: #34d399;
+    --success-soft: #0b2a24;
+    --success-border: #14532d;
+    --warning: #fbbf24;
+    --warning-soft: #2a2007;
+    --warning-border: #713f12;
+    --danger: #f87171;
+    --danger-soft: #2d1218;
+    --danger-border: #7f1d1d;
+    --elev-panel: 0 0 0 1px rgb(255 255 255 / 0.06), 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -6px rgb(0 0 0 / 0.45);
+  }
+
+  /* ---------- Base ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scrollbar-gutter: stable; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.6;
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 { line-height: 1.15; letter-spacing: -0.015em; margin: 0; text-wrap: balance; }
+  h2 { font-size: 1.6rem; font-weight: 600; }
+  h3 { font-size: 1.05rem; font-weight: 600; }
+  p { margin: 0 0 0.9em; }
+  a { color: var(--primary); text-underline-offset: 3px; }
+  a:hover { text-decoration-thickness: 2px; }
+  code, kbd, .mono { font-family: var(--font-mono); font-size: 0.86em; }
+  code {
+    background: var(--muted);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.12em 0.4em;
+    word-break: break-word;
+  }
+  pre {
+    background: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * 0.8);
+    padding: 12px 14px;
+    overflow-x: auto;
+    margin: 0 0 1em;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  pre code { background: none; border: 0; padding: 0; }
+  :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  section { scroll-margin-top: 84px; }
+
+  /* ---------- Top nav (sticky ink bar) ---------- */
+  .topnav {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: var(--ink);
+    color: var(--ink-foreground);
+    border-bottom: 1px solid color-mix(in srgb, var(--ink-foreground) 10%, transparent);
+  }
+  .topnav-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 16px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink-foreground); flex: none; }
+  .brand-mark {
+    width: 28px; height: 28px; border-radius: 7px;
+    background: var(--brand);
+    display: grid; place-items: center;
+  }
+  .brand-mark svg { width: 18px; height: 18px; }
+  .brand-name { font-weight: 600; font-size: 16px; letter-spacing: -0.01em; }
+  .navlinks {
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    min-width: 0;
+    flex: 1;
+  }
+  .navlinks::-webkit-scrollbar { display: none; }
+  .navlinks a {
+    color: var(--ink-muted);
+    text-decoration: none;
+    font-size: 13px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .navlinks a:hover, .navlinks a.active { color: var(--ink-foreground); background: color-mix(in srgb, var(--ink-foreground) 12%, transparent); }
+  .navlinks a:focus-visible { outline-color: var(--hero-accent); }
+  .theme-toggle {
+    flex: none;
+    font: inherit;
+    font-size: 13px;
+    color: var(--ink-foreground);
+    background: color-mix(in srgb, var(--ink-foreground) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--ink-foreground) 22%, transparent);
+    border-radius: 999px;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+  .theme-toggle:hover { background: color-mix(in srgb, var(--ink-foreground) 18%, transparent); }
+  .theme-toggle:focus-visible { outline-color: var(--hero-accent); }
+
+  /* ---------- Hero (ink band, CSS-only glow) ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(60% 90% at 85% 0%, color-mix(in srgb, var(--brand) 55%, transparent), transparent 70%),
+      radial-gradient(45% 70% at 10% 100%, color-mix(in srgb, var(--signal) 22%, transparent), transparent 70%),
+      var(--ink);
+    color: var(--ink-foreground);
+  }
+  .hero-inner { max-width: 1180px; margin: 0 auto; padding: 64px 16px 72px; position: relative; }
+  .eyebrow-line { font-size: 13px; color: var(--ink-muted); margin-bottom: 14px; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.2vw, 3.4rem);
+    font-weight: 600;
+    max-width: 18ch;
+    margin-bottom: 18px;
+  }
+  .hero h1 .accent { color: var(--hero-accent); }
+  .hero .subline { color: var(--ink-muted); font-size: 1.05rem; max-width: 62ch; margin-bottom: 28px; }
+  .hero-links { display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    text-decoration: none;
+    font-size: 14px; font-weight: 500;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+  }
+  .btn-solid { background: var(--primary); color: var(--ink); }
+  .btn-solid:hover { filter: brightness(1.08); }
+  .btn-ghost { color: var(--ink-foreground); border-color: color-mix(in srgb, var(--ink-foreground) 28%, transparent); }
+  .btn-ghost:hover { background: color-mix(in srgb, var(--ink-foreground) 10%, transparent); }
+  .hero .btn-solid { background: var(--hero-accent); color: var(--ink); }
+  .hero-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 44px;
+    max-width: 880px;
+  }
+  .hero-fact {
+    border: 1px solid color-mix(in srgb, var(--ink-foreground) 16%, transparent);
+    background: color-mix(in srgb, var(--ink-foreground) 5%, transparent);
+    border-radius: calc(var(--radius) * 1.2);
+    padding: 14px 16px;
+  }
+  .hero-fact b { display: block; font-size: 1.5rem; font-weight: 600; color: var(--ink-foreground); }
+  .hero-fact span { font-size: 13px; color: var(--ink-muted); }
+
+  /* ---------- Page layout ---------- */
+  main { max-width: 1180px; margin: 0 auto; padding: 28px 16px 56px; }
+  .panel {
+    background: var(--card);
+    color: var(--foreground);
+    border-radius: calc(var(--radius) * 1.2);
+    box-shadow: var(--elev-panel);
+    padding: 28px 24px;
+    margin-bottom: 22px;
+  }
+  .panel-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--primary);
+    background: var(--primary-soft);
+    border-radius: 999px;
+    padding: 3px 9px;
+    font-weight: 500;
+  }
+  .lead { color: var(--muted-foreground); font-size: 1.02rem; max-width: 70ch; }
+  .muted { color: var(--muted-foreground); }
+  .small { font-size: 13px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .card-mini {
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * 1.2);
+    padding: 16px 18px;
+    background: var(--card);
+  }
+  .card-mini p:last-child { margin-bottom: 0; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: calc(var(--radius) * 1.2); margin-bottom: 1em; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  th { background: var(--muted); font-weight: 600; font-size: 13px; color: var(--muted-foreground); white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+  td code, td .mono { white-space: nowrap; }
+  td .wrap { white-space: normal; }
+  .sub { font-size: 13px; color: var(--muted-foreground); margin-top: 22px; margin-bottom: 8px; font-weight: 600; color: var(--foreground); }
+
+  /* Tags */
+  .tag {
+    display: inline-flex; align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.02em;
+    border-radius: 999px;
+    padding: 2px 8px;
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+  .tag-llm { background: var(--signal); color: var(--ink); }
+  .tag-rule { background: var(--success-soft); color: var(--success); border-color: var(--success-border); }
+  .tag-human { background: var(--primary-soft); color: var(--primary); border-color: var(--border-strong); }
+
+  /* Callouts */
+  .callout {
+    border: 1px solid var(--border);
+    background: var(--primary-soft);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+  .callout.warn { border-left-color: var(--warning); background: var(--warning-soft); }
+  .callout.bad { border-left-color: var(--danger); background: var(--danger-soft); }
+  .callout p:last-child { margin-bottom: 0; }
+
+  /* ---------- Flow diagram ---------- */
+  .diagram-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * 1.2);
+    background: var(--background);
+    padding: 12px;
+    margin: 8px 0 14px;
+  }
+  .diagram { display: block; width: 100%; min-width: 800px; height: auto; }
+  .diagram .node rect { fill: var(--card); stroke-width: 1.5; }
+  .diagram .node.llm rect { stroke: var(--signal); }
+  .diagram .node.rule rect { stroke: var(--success); }
+  .diagram .node.human rect { stroke: var(--primary); stroke-dasharray: 6 4; fill: var(--primary-soft); }
+  .diagram .t-num { fill: var(--muted-foreground); font-family: var(--font-mono); font-size: 11px; }
+  .diagram .t-title { fill: var(--foreground); font-size: 14px; font-weight: 600; }
+  .diagram .t-badge { font-family: var(--font-mono); font-size: 10px; font-weight: 500; }
+  .diagram .badge-llm rect { fill: var(--signal); }
+  .diagram .badge-llm text { fill: var(--ink); }
+  .diagram .badge-rule rect { fill: var(--success-soft); stroke: var(--success-border); }
+  .diagram .badge-rule text { fill: var(--success); }
+  .diagram .badge-human rect { fill: var(--card); stroke: var(--primary); }
+  .diagram .badge-human text { fill: var(--primary); }
+  .diagram .edge { stroke: var(--muted-foreground); stroke-width: 1.5; fill: none; }
+  .diagram .edge-dash { stroke-dasharray: 5 4; }
+  .diagram .lane-label { fill: var(--muted-foreground); font-size: 12px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--muted-foreground); align-items: center; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+
+  /* Stage cards */
+  .stage-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; margin-top: 16px; }
+  .stage {
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * 1.2);
+    padding: 14px 16px;
+    background: var(--card);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .stage-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .stage h3 { font-size: 15px; }
+  .stage p { font-size: 14px; color: var(--muted-foreground); margin: 0; }
+  .stage .where { font-size: 12px; font-family: var(--font-mono); }
+  .stage .where a { color: var(--primary); }
+
+  /* ---------- Run steps ---------- */
+  ol.steps { padding-left: 0; list-style: none; counter-reset: st; margin: 0; display: grid; gap: 12px; }
+  ol.steps > li {
+    counter-increment: st;
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+  ol.steps > li::before {
+    content: counter(st);
+    width: 32px; height: 32px;
+    border-radius: 9px;
+    background: var(--primary-soft);
+    color: var(--primary);
+    display: grid; place-items: center;
+    font-weight: 600; font-size: 14px;
+  }
+  ol.steps li p { margin-bottom: 0.4em; }
+
+  /* ---------- Security and limitations lists ---------- */
+  ul.clean { padding-left: 1.1em; margin: 0.4em 0 1em; }
+  ul.clean li { margin-bottom: 0.45em; }
+  .two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+
+  /* ---------- Guide links ---------- */
+  .guide-card {
+    display: block;
+    text-decoration: none;
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * 1.2);
+    padding: 16px 18px;
+    background: var(--card);
+  }
+  .guide-card:hover { border-color: var(--primary); }
+  .guide-card b { color: var(--primary); font-family: var(--font-mono); font-weight: 500; font-size: 14px; }
+  .guide-card p { margin: 6px 0 0; font-size: 14px; color: var(--muted-foreground); }
+
+  footer { max-width: 1180px; margin: 0 auto; padding: 0 16px 40px; color: var(--muted-foreground); font-size: 13px; }
+
+  /* ---------- Small screens ---------- */
+  @media (max-width: 600px) {
+    body { font-size: 14.5px; }
+    .topnav-inner { gap: 8px; padding: 0 16px; }
+    .brand-name { display: none; }
+    .hero-inner { padding: 44px 16px 52px; }
+    .panel { padding: 22px 16px; }
+    .stage-grid { grid-template-columns: 1fr; }
+    .theme-toggle { padding: 6px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topnav" aria-label="Site">
+  <div class="topnav-inner">
+    <a class="brand" href="#top" aria-label="Prism guide, top of page">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" style="stroke:var(--ink-foreground)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12h7l5-5" />
+          <path d="M10 12l5 0" />
+          <path d="M15 7l6 2" />
+          <path d="M15 12l6 0" />
+          <path d="M15 17l6-2" />
+        </svg>
+      </span>
+      <span class="brand-name">Prism</span>
+    </a>
+    <nav class="navlinks" aria-label="Guide sections">
+      <a href="#what">What it is</a>
+      <a href="#run">Run it</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#agents">Agents</a>
+      <a href="#rag">RAG</a>
+      <a href="#safety">Masking &amp; models</a>
+      <a href="#data">Data</a>
+      <a href="#code">Code map</a>
+      <a href="#sdlc">SDLC engine</a>
+      <a href="#security">Security</a>
+      <a href="#limits">Limitations</a>
+      <a href="#guides">Guides</a>
+    </nav>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">Dark mode</button>
+  </div>
+</header>
+
+<div id="top"></div>
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-inner">
+    <p class="eyebrow-line">Prism, formerly FinReq &middot; Project guide</p>
+    <h1 id="hero-title">Turn a stakeholder interview into <span class="accent">policy-mapped</span> requirements, reviewed by a person.</h1>
+    <p class="subline">Prism is an agentic, multi-agent LLM system for requirements engineering and SDLC model recommendation in financial services. It extracts requirements from a transcript, checks them against sample policies, scores risk, ranks delivery models and writes the paperwork. Nothing is final until a person accepts it.</p>
+    <div class="hero-links">
+      <a class="btn btn-solid" href="#run">How to run it</a>
+      <a class="btn btn-ghost" href="#pipeline">See the pipeline</a>
+    </div>
+    <div class="hero-facts" role="list">
+      <div class="hero-fact" role="listitem"><b>11 + 1</b><span>pipeline stages, plus human review</span></div>
+      <div class="hero-fact" role="listitem"><b>9</b><span>agents: 4 LLM, 5 rule-based</span></div>
+      <div class="hero-fact" role="listitem"><b>10</b><span>delivery models ranked for fit</span></div>
+      <div class="hero-fact" role="listitem"><b>4</b><span>sign-offs before an SDLC choice is baselined</span></div>
+    </div>
+  </div>
+</section>
+
+<main>
+
+  <!-- 1. What Prism is -->
+  <section id="what" class="panel" aria-labelledby="what-title">
+    <div class="panel-head">
+      <span class="num">01</span>
+      <h2 id="what-title">What Prism is</h2>
+    </div>
+    <p class="lead">Prism reads a stakeholder interview and produces the artefacts a delivery team needs: a software requirements specification (SRS), user stories, a traceability matrix, a compliance-control matrix, a risk register and an SDLC plan. Every step that a regulator or auditor would ask about leaves a record.</p>
+    <div class="grid-2" style="margin-top:16px">
+      <div class="card-mini">
+        <h3>Domain</h3>
+        <p>Financial services. The first use case is <strong>loan origination</strong>, following the problem statement's advice to begin with one. Sample policies in the knowledge base are fictional and labelled as such.</p>
+      </div>
+      <div class="card-mini">
+        <h3>Agentic and multi-agent</h3>
+        <p>One coordinator, <code>run_pipeline()</code>, calls each agent in a fixed order and shares one context. Four agents call a language model. Five are deterministic Python, because quality, conflict, risk, security and validation judgments must be explainable and reproducible for an audit.</p>
+      </div>
+      <div class="card-mini">
+        <h3>Human in the loop</h3>
+        <p>Requirements change state only through an explicit human action: accept, reject, edit or regenerate. The SDLC choice needs four role sign-offs. The compliance agent never makes a legal determination.</p>
+      </div>
+      <div class="card-mini">
+        <h3>Naming</h3>
+        <p>Prism is the product and the web UI brand. The repository, the Python package (<code>finreq</code>), the CLI and the <code>FINREQ_*</code> environment variables keep the original name, FinReq.</p>
+      </div>
+    </div>
+
+    <h3 class="sub">The problem it solves</h3>
+    <p>Requirements for a financial product start as a conversation. A loan officer explains how an application should be assessed, a compliance officer names the rules, a security officer lists the controls. An analyst then has to turn that talk into requirements that are testable, traceable to who said them, mapped to policy, and risk-rated, and then pick a delivery method. That work is slow, and traceability is usually lost on the way. Prism does the drafting and the cross-checking. People make every decision.</p>
+
+    <h3 class="sub">What goes in and what comes out</h3>
+    <div class="grid-2">
+      <div class="card-mini">
+        <h3>In</h3>
+        <ul>
+          <li>A stakeholder interview transcript (pasted, uploaded as .txt, or the bundled sample).</li>
+          <li>The stakeholder role and a domain tag, such as <code>loan_officer</code> and <code>LOAN</code>.</li>
+          <li>An optional SDLC project profile: nine factors a person sets with sliders.</li>
+          <li>A folder of policy documents (the knowledge base).</li>
+        </ul>
+      </div>
+      <div class="card-mini">
+        <h3>Out</h3>
+        <ul>
+          <li>Requirements with category, priority, acceptance criteria, a verbatim source quote, quality issues, policy evidence, risk level and a status.</li>
+          <li>A ranked list of ten delivery models, with reasons for and against each.</li>
+          <li>One zip of nine files: SRS, user stories, requirements CSV, traceability matrix, compliance matrix, risk register, open issues, assumptions and dependencies, SDLC plan.</li>
+          <li>An audit trail of every model call, retrieval and human decision.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="sub">The six ideas the design rests on</h3>
+    <div class="grid-2">
+      <div class="card-mini"><h3>1. One coordinator, many small agents</h3><p>Each agent does one narrow job and mutates the requirement it is given. <code>run_pipeline()</code> calls them in a fixed order. There is no agent-to-agent chatter, so a run is easy to trace and to replay.</p></div>
+      <div class="card-mini"><h3>2. Use a model only where language is the job</h3><p>Four agents read or write natural language, so they call an LLM. Everything that scores, routes or checks is plain Python with fixed thresholds. The same input always gives the same routing, which an auditor can reproduce.</p></div>
+      <div class="card-mini"><h3>3. Ground every compliance claim in a document</h3><p>The compliance agent may only restate what a retrieved policy passage says. It must cite the passage. If nothing relevant is found it records a gap instead of guessing. See <a href="#rag">Retrieval (RAG)</a>.</p></div>
+      <div class="card-mini"><h3>4. Never show the model real personal data</h3><p>Emails, card numbers, PAN, IFSC, phone and account numbers are replaced by placeholders before any agent runs, and restored only for the human-facing screens. See <a href="#safety">Masking and model backends</a>.</p></div>
+      <div class="card-mini"><h3>5. A person has the last word</h3><p>Automated stages can only route a requirement to <em>needs clarification</em> or <em>pending review</em>. Only an explicit accept, reject, edit or regenerate changes the status afterwards. The delivery model needs four sign-offs.</p></div>
+      <div class="card-mini"><h3>6. Everything leaves a record</h3><p>Every model call and retrieval is an audit event. Every decision is an approval record. Both are stored in SQLite and can be viewed per project in the UI.</p></div>
+    </div>
+
+    <h3 class="sub">Technology</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th scope="col">Layer</th><th scope="col">Choice</th><th scope="col">Why</th></tr></thead>
+      <tbody>
+        <tr><td>Backend</td><td>Python 3.11, FastAPI, pydantic</td><td class="wrap">Typed models shared by agents, storage and API. Analyses run in a background thread and the browser polls.</td></tr>
+        <tr><td>Front end</td><td>React 19, Vite, Tailwind v4, shadcn/ui, <code>motion/react</code></td><td class="wrap">A four-step guided flow with light and dark themes. Built to <code>frontend/dist</code> and served by the same FastAPI process.</td></tr>
+        <tr><td>Retrieval</td><td>scikit-learn TF-IDF and cosine similarity</td><td class="wrap">Offline, no vector database, one small file to swap later.</td></tr>
+        <tr><td>Models</td><td>Ollama (local), Gemini API, Groq API</td><td class="wrap">Chosen once in <code>build_llm_client()</code>. Local needs no key and no data leaves the machine.</td></tr>
+        <tr><td>Storage</td><td>SQLite</td><td class="wrap">Requirements, risks, approvals, projects and audit log in one file, <code>finreq.db</code>.</td></tr>
+        <tr><td>Quality</td><td>pytest, bandit, pip-audit, secret scan, benchmarks</td><td class="wrap">One script, <code>backend/scripts/gates.py</code>, runs locally and in CI.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="sub">A requirement, start to finish</h3>
+    <p>The sample interview has the loan officer say, roughly, that applicants must be verified before a loan decision. Here is what happens to that sentence.</p>
+    <ol>
+      <li><strong>Mask.</strong> Any PAN or phone number in the text becomes <code>[PAN_1]</code> or <code>[PHONE_1]</code>.</li>
+      <li><strong>Extract.</strong> The model returns a statement such as &ldquo;The system shall verify the applicant&rsquo;s identity before a loan decision is made&rdquo;, with a priority, acceptance criteria, a justification and the verbatim quote it came from.</li>
+      <li><strong>Classify.</strong> It gets categories such as functional and regulatory.</li>
+      <li><strong>Quality check.</strong> Rules look for vague words, a missing &ldquo;shall&rdquo;, missing acceptance criteria or source, unknown acronyms and impossible promises.</li>
+      <li><strong>Compare.</strong> The conflict agent checks it against the other requirements for duplicates and contradictions.</li>
+      <li><strong>Compliance.</strong> The KYC policy passage scores highest in retrieval. The model states the control it requires, citing that passage.</li>
+      <li><strong>Security, risk, validation.</strong> It is tagged, scored (for example high) and routed to <em>pending review</em> if no blocking issue remains.</li>
+      <li><strong>Unmask and save.</strong> Real values return to the display fields and the requirement is stored.</li>
+      <li><strong>Review.</strong> A person opens it, reads the evidence trace, and accepts, rejects, edits or regenerates it.</li>
+    </ol>
+    <p class="small muted" style="margin-top:14px">FinReq was itself built with the model it recommended for itself, an Agile-DevSecOps hybrid. See <a href="../docs/SDLC.md">docs/SDLC.md</a>.</p>
+  </section>
+
+  <!-- 2. How to run -->
+  <section id="run" class="panel" aria-labelledby="run-title">
+    <div class="panel-head">
+      <span class="num">02</span>
+      <h2 id="run-title">How to run it</h2>
+    </div>
+    <p class="lead">Needs Python 3.11 or later and Node.js 24 or later, and one model backend.</p>
+
+    <h3 class="sub">Install and build the app</h3>
+    <pre><code>pip install -r backend/requirements.txt
+npm ci --prefix frontend
+npm run build --prefix frontend
+python backend/server.py</code></pre>
+    <p>Open <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a>. The server serves the API and the built React front end from one process. For front-end work, run <code>npm run dev --prefix frontend</code> (port 5173, which proxies <code>/api</code> to <code>backend/server.py</code> on port 8000).</p>
+
+    <h3 class="sub">Choose a model backend</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th scope="col">Backend</th><th scope="col">Default model</th><th scope="col">Key</th><th scope="col">Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-llm">Ollama</span></td>
+            <td><code>qwen2.5:3b-instruct</code></td>
+            <td>None, runs locally</td>
+            <td class="wrap">Run <code>ollama pull qwen2.5:3b-instruct</code>, then keep <code>ollama serve</code> running. About three times faster than the 7B fallback, but it recalls fewer requirements. Use <code>hhao/qwen2.5-coder-tools:7b</code> when recall matters more than time.</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-llm">Gemini</span></td>
+            <td><code>gemini-3.5-flash-lite</code></td>
+            <td><code>GEMINI_API_KEY</code></td>
+            <td class="wrap">About 32 calls per analysis. The free tier allows 15 a minute and 500 a day, so expect a run to take minutes. Override with <code>FINREQ_GEMINI_MODEL</code>.</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-llm">Groq</span></td>
+            <td><code>openai/gpt-oss-120b</code></td>
+            <td><code>GROQ_API_KEY</code></td>
+            <td class="wrap">Free plan. The model dropdown lists Groq's chat models from <code>GET /api/groq/models</code>. Override with <code>FINREQ_GROQ_MODEL</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <p><strong>API keys come only from the environment.</strong> Set <code>GEMINI_API_KEY</code> or <code>GROQ_API_KEY</code> in the shell that starts the server, or put it in a <code>.env</code> file at the repo root. <code>.env</code> is gitignored. A value in the shell wins over <code>.env</code>. No key is accepted as a constructor argument, CLI flag, API route or UI field, and keys are never placed in URLs.</p>
+    </div>
+
+    <h3 class="sub">Use it in the browser</h3>
+    <ol class="steps">
+      <li><div><p><strong>Transcript.</strong> Name the project, paste or upload a transcript, or choose the sample interview. Then analyse (Ctrl or Cmd+Enter). The run view shows each stage as it happens.</p></div></li>
+      <li><div><p><strong>Review.</strong> Triage requirements in the list or on the risk map. The inspector shows the evidence trace. Keys: <code>j</code> and <code>k</code> move, <code>a</code> accepts, <code>r</code> rejects, <code>e</code> edits. Answer follow-up questions to re-run with the answers added.</p></div></li>
+      <li><div><p><strong>Delivery model.</strong> Ten models are ranked by fit. Choose one, adjust the project profile if needed, then collect the four sign-offs.</p></div></li>
+      <li><div><p><strong>Export.</strong> Download the nine artefacts as one zip. The audit trail lists every decision and model call for the analysis.</p></div></li>
+    </ol>
+    <p class="small muted" style="margin-top:14px">Every analysis is kept under Projects and survives a server restart.</p>
+
+    <h3 class="sub">Run it from the command line</h3>
+    <pre><code>python backend/cli.py --transcript backend/data/fixtures/loan_officer_interview.txt --role loan_officer \
+    --domain LOAN --profile backend/data/fixtures/loan_project_profile.json --out out
+
+# add --backend gemini (or groq) and --model to choose a backend</code></pre>
+
+    <h3 class="sub">Check it</h3>
+    <pre><code>python -m pytest                          # no Ollama needed (FakeLLMClient)
+python backend/scripts/gates.py                   # every gate: tests, eval floors, bandit, secret scan, web build, audits
+python backend/eval/evaluate.py                   # offline benchmarks
+python backend/eval/evaluate.py --live            # live extraction eval (needs ollama serve)</code></pre>
+  </section>
+
+  <!-- 3. Pipeline -->
+  <section id="pipeline" class="panel" aria-labelledby="pipeline-title">
+    <div class="panel-head">
+      <span class="num">03</span>
+      <h2 id="pipeline-title">The pipeline</h2>
+    </div>
+    <p class="lead"><code>run_pipeline()</code> in <a href="../backend/finreq/pipeline.py">pipeline.py</a> is the coordinator. It builds one <code>AgentContext</code>, then runs the stages below in order. Agents mutate requirements in place. Every LLM call and retrieval is logged as an audit event.</p>
+
+    <div class="diagram-wrap" role="img" aria-label="Flow diagram of the Prism pipeline. Twelve stages run in two rows: mask, interaction, extraction, classification, quality check, conflict check; then compliance, security, risk, validation, unmask and save, and human review. Stages marked LLM are model calls and the rest are rule-based.">
+      <svg class="diagram" viewBox="0 0 1050 310" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" style="fill:var(--muted-foreground)"/>
+          </marker>
+        </defs>
+
+        <!-- Row 1 edges -->
+        <path class="edge" d="M150,78 L180,78" marker-end="url(#arrow)"/>
+        <path class="edge" d="M330,78 L360,78" marker-end="url(#arrow)"/>
+        <path class="edge" d="M510,78 L540,78" marker-end="url(#arrow)"/>
+        <path class="edge" d="M690,78 L720,78" marker-end="url(#arrow)"/>
+        <path class="edge" d="M870,78 L900,78" marker-end="url(#arrow)"/>
+        <!-- Return sweep from row 1 to row 2 -->
+        <path class="edge" d="M975,126 L975,158 L75,158 L75,190" marker-end="url(#arrow)"/>
+        <!-- Row 2 edges -->
+        <path class="edge" d="M150,238 L180,238" marker-end="url(#arrow)"/>
+        <path class="edge" d="M330,238 L360,238" marker-end="url(#arrow)"/>
+        <path class="edge" d="M510,238 L540,238" marker-end="url(#arrow)"/>
+        <path class="edge" d="M690,238 L720,238" marker-end="url(#arrow)"/>
+        <path class="edge edge-dash" d="M870,238 L900,238" marker-end="url(#arrow)"/>
+
+        <text class="lane-label" x="0" y="20">Ingest, extract, check</text>
+        <text class="lane-label" x="0" y="180">Map, assess, route, save</text>
+
+        <!-- Row 1 -->
+        <g class="node rule">
+          <rect x="0" y="30" width="150" height="96" rx="10"/>
+          <text class="t-num" x="12" y="50">01</text>
+          <text class="t-title" x="12" y="72">Mask</text>
+          <g class="badge-rule"><rect x="12" y="92" width="50" height="18" rx="9"/><text class="t-badge" x="37" y="104.5" text-anchor="middle">RULE</text></g>
+        </g>
+        <g class="node llm">
+          <rect x="180" y="30" width="150" height="96" rx="10"/>
+          <text class="t-num" x="192" y="50">02</text>
+          <text class="t-title" x="192" y="72">Interaction</text>
+          <g class="badge-llm"><rect x="192" y="92" width="44" height="18" rx="9"/><text class="t-badge" x="214" y="104.5" text-anchor="middle">LLM</text></g>
+        </g>
+        <g class="node llm">
+          <rect x="360" y="30" width="150" height="96" rx="10"/>
+          <text class="t-num" x="372" y="50">03</text>
+          <text class="t-title" x="372" y="72">Extraction</text>
+          <g class="badge-llm"><rect x="372" y="92" width="44" height="18" rx="9"/><text class="t-badge" x="394" y="104.5" text-anchor="middle">LLM</text></g>
+        </g>
+        <g class="node llm">
+          <rect x="540" y="30" width="150" height="96" rx="10"/>
+          <text class="t-num" x="552" y="50">04</text>
+          <text class="t-title" x="552" y="72">Classification</text>
+          <g class="badge-llm"><rect x="552" y="92" width="44" height="18" rx="9"/><text class="t-badge" x="574" y="104.5" text-anchor="middle">LLM</text></g>
+        </g>
+        <g class="node rule">
+          <rect x="720" y="30" width="150" height="96" rx="10"/>
+          <text class="t-num" x="732" y="50">05</text>
+          <text class="t-title" x="732" y="72">Quality check</text>
+          <g class="badge-rule"><rect x="732" y="92" width="50" height="18" rx="9"/><text class="t-badge" x="757" y="104.5" text-anchor="middle">RULE</text></g>
+        </g>
+        <g class="node rule">
+          <rect x="900" y="30" width="150" height="96" rx="10"/>
+          <text class="t-num" x="912" y="50">06</text>
+          <text class="t-title" x="912" y="72">Conflict check</text>
+          <g class="badge-rule"><rect x="912" y="92" width="50" height="18" rx="9"/><text class="t-badge" x="937" y="104.5" text-anchor="middle">RULE</text></g>
+        </g>
+
+        <!-- Row 2 -->
+        <g class="node llm">
+          <rect x="0" y="190" width="150" height="96" rx="10"/>
+          <text class="t-num" x="12" y="210">07</text>
+          <text class="t-title" x="12" y="232">Compliance</text>
+          <g class="badge-llm"><rect x="12" y="252" width="44" height="18" rx="9"/><text class="t-badge" x="34" y="264.5" text-anchor="middle">LLM</text></g>
+        </g>
+        <g class="node rule">
+          <rect x="180" y="190" width="150" height="96" rx="10"/>
+          <text class="t-num" x="192" y="210">08</text>
+          <text class="t-title" x="192" y="232">Security</text>
+          <g class="badge-rule"><rect x="192" y="252" width="50" height="18" rx="9"/><text class="t-badge" x="217" y="264.5" text-anchor="middle">RULE</text></g>
+        </g>
+        <g class="node rule">
+          <rect x="360" y="190" width="150" height="96" rx="10"/>
+          <text class="t-num" x="372" y="210">09</text>
+          <text class="t-title" x="372" y="232">Risk</text>
+          <g class="badge-rule"><rect x="372" y="252" width="50" height="18" rx="9"/><text class="t-badge" x="397" y="264.5" text-anchor="middle">RULE</text></g>
+        </g>
+        <g class="node rule">
+          <rect x="540" y="190" width="150" height="96" rx="10"/>
+          <text class="t-num" x="552" y="210">10</text>
+          <text class="t-title" x="552" y="232">Validation</text>
+          <g class="badge-rule"><rect x="552" y="252" width="50" height="18" rx="9"/><text class="t-badge" x="577" y="264.5" text-anchor="middle">RULE</text></g>
+        </g>
+        <g class="node rule">
+          <rect x="720" y="190" width="150" height="96" rx="10"/>
+          <text class="t-num" x="732" y="210">11</text>
+          <text class="t-title" x="732" y="232">Unmask and save</text>
+          <g class="badge-rule"><rect x="732" y="252" width="50" height="18" rx="9"/><text class="t-badge" x="757" y="264.5" text-anchor="middle">RULE</text></g>
+        </g>
+        <g class="node human">
+          <rect x="900" y="190" width="150" height="96" rx="10"/>
+          <text class="t-num" x="912" y="210">12</text>
+          <text class="t-title" x="912" y="232">Human review</text>
+          <g class="badge-human"><rect x="912" y="252" width="62" height="18" rx="9"/><text class="t-badge" x="943" y="264.5" text-anchor="middle">PERSON</text></g>
+        </g>
+      </svg>
+    </div>
+    <div class="legend" aria-hidden="true">
+      <span><span class="tag tag-llm">LLM</span> model call</span>
+      <span><span class="tag tag-rule">RULE</span> deterministic Python</span>
+      <span><span class="tag tag-human">PERSON</span> human decision (dashed)</span>
+      <span>Interaction (02) runs only when clarifying questions are on.</span>
+    </div>
+
+    <h3 class="sub">Stage by stage</h3>
+    <div class="stage-grid">
+      <article class="stage">
+        <div class="stage-top"><h3>01 Mask</h3><span class="tag tag-rule">rule</span></div>
+        <p>Regex PII masking of emails, card and PAN numbers, IFSC codes, phone numbers and account numbers. The raw transcript is masked once, here. Every LLM-facing agent sees only the masked text.</p>
+        <span class="where"><a href="../backend/finreq/masking.py">masking.py</a> mask_text L42</span>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>02 Interaction</h3><span class="tag tag-llm">LLM</span></div>
+        <p>Asks clarifying questions where information is missing or vague. Answers are added on re-run.</p>
+        <span class="where"><a href="../backend/finreq/agents/interaction.py">agents/interaction.py</a> L52</span>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>03 Extraction</h3><span class="tag tag-llm">LLM</span></div>
+        <p>Turns the masked transcript into requirements. IDs continue from the highest number already stored for that prefix, so a re-analysis never overwrites an earlier requirement.</p>
+        <span class="where"><a href="../backend/finreq/agents/extraction.py">agents/extraction.py</a> L33</span>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>04 Classification</h3><span class="tag tag-llm">LLM</span></div>
+        <p>Assigns one or more categories to each requirement.</p>
+        <span class="where"><a href="../backend/finreq/agents/classification.py">agents/classification.py</a> L20</span>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>05 Quality check</h3><span class="tag tag-rule">rule</span></div>
+        <p>Checks ambiguity, completeness and testability against fixed rules. Benchmarked: quality-check F1 must stay at or above 0.95.</p>
+        <span class="where"><a href="../backend/finreq/agents/quality.py">agents/quality.py</a> L46</span>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>06 Conflict check</h3><span class="tag tag-rule">rule</span></div>
+        <p>TF-IDF similarity finds duplicates and contradictions. It misses paraphrases; semantic embeddings would fix that.</p>
+        <span class="where"><a href="../backend/finreq/agents/conflict.py">agents/conflict.py</a> L40</span>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>07 Compliance</h3><span class="tag tag-llm">LLM</span></div>
+        <p>Maps each requirement to policy passages retrieved from the knowledge base, with cited evidence. Low confidence is recorded as a gap for a human to resolve. The output is not legal advice.</p>
+        <span class="where"><a href="../backend/finreq/agents/compliance.py">agents/compliance.py</a> L26 &middot; loop in <a href="../backend/finreq/pipeline.py">pipeline.py</a> L123</span>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>08 Security and privacy</h3><span class="tag tag-rule">rule</span></div>
+        <p>Tags security and privacy concerns and checks for missing controls.</p>
+        <span class="where"><a href="../backend/finreq/agents/security.py">agents/security.py</a> L29</span>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>09 Risk</h3><span class="tag tag-rule">rule</span></div>
+        <p>Scores each requirement and sets <code>requirement.risk_level</code>. The returned risk item and that field always agree.</p>
+        <span class="where"><a href="../backend/finreq/agents/risk.py">agents/risk.py</a> assess L63, RiskAnalysisAgent L101 &middot; <a href="../backend/finreq/pipeline.py">pipeline.py</a> L131</span>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>10 Validation</h3><span class="tag tag-rule">rule</span></div>
+        <p>Routes each requirement to NEEDS_CLARIFICATION or PENDING_REVIEW. It never approves anything.</p>
+        <span class="where"><a href="../backend/finreq/agents/validation.py">agents/validation.py</a> L30</span>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>11 Unmask and persist</h3><span class="tag tag-rule">rule</span></div>
+        <p>After every agent has run, real values go back into the human-facing fields only. Requirements, risks and audit events are then saved.</p>
+        <span class="where"><a href="../backend/finreq/pipeline.py">pipeline.py</a> L136</span>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>12 Human review</h3><span class="tag tag-human">person</span></div>
+        <p>Accept, reject, edit or regenerate. This is the only code path that changes <code>approval_status</code> after validation. Each decision is an approval record.</p>
+        <span class="where"><a href="../backend/finreq/agents/approval.py">agents/approval.py</a> record_decision L33</span>
+      </article>
+    </div>
+    <p class="small muted" style="margin-top:14px">Key lines in <a href="../backend/finreq/pipeline.py">pipeline.py</a>: <code>run_pipeline</code> L59, mask call L97, extraction L109, compliance loop L123, risk L131, unmask and save L136. Empty transcripts are rejected before any model call.</p>
+  </section>
+
+  <!-- 4. Agents -->
+  <section id="agents" class="panel" aria-labelledby="agents-title">
+    <div class="panel-head">
+      <span class="num">04</span>
+      <h2 id="agents-title">Agents</h2>
+    </div>
+    <p class="lead">Each agent extends a shared base and receives an <code>AgentContext</code> holding the LLM client, knowledge base, store and audit log. The Python agents below are in <code>backend/finreq/agents/</code>. The coordinator is <code>pipeline.py</code>, and there is no separate coordinator class.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th scope="col">File</th><th scope="col">Agent</th><th scope="col">What it does</th><th scope="col">Type</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><a href="../backend/finreq/agents/base.py">agents/base.py</a></td><td>Base and context</td><td class="wrap"><code>Agent</code> base class and <code>AgentContext</code> (L25): shared llm, kb, store and audit log.</td><td><span class="tag tag-rule">shared</span></td></tr>
+          <tr><td><a href="../backend/finreq/agents/interaction.py">interaction.py</a></td><td>Stakeholder Interaction</td><td class="wrap">Clarifying questions on vague or missing information.</td><td><span class="tag tag-llm">LLM</span></td></tr>
+          <tr><td><a href="../backend/finreq/agents/extraction.py">extraction.py</a></td><td>Requirement Extraction</td><td class="wrap">Requirements from the masked transcript, with source excerpts.</td><td><span class="tag tag-llm">LLM</span></td></tr>
+          <tr><td><a href="../backend/finreq/agents/classification.py">classification.py</a></td><td>Classification</td><td class="wrap">Multi-label requirement categories.</td><td><span class="tag tag-llm">LLM</span></td></tr>
+          <tr><td><a href="../backend/finreq/agents/quality.py">quality.py</a></td><td>Quality Check</td><td class="wrap">Ambiguity, completeness and testability.</td><td><span class="tag tag-rule">rule</span></td></tr>
+          <tr><td><a href="../backend/finreq/agents/conflict.py">conflict.py</a></td><td>Conflict Detection</td><td class="wrap">TF-IDF duplicates and contradictions between requirements.</td><td><span class="tag tag-rule">rule</span></td></tr>
+          <tr><td><a href="../backend/finreq/agents/compliance.py">compliance.py</a></td><td>Compliance</td><td class="wrap">Retrieval-grounded policy mapping. Low confidence becomes a gap.</td><td><span class="tag tag-llm">LLM</span></td></tr>
+          <tr><td><a href="../backend/finreq/agents/security.py">security.py</a></td><td>Security and Privacy</td><td class="wrap">Tagging and missing-control checks.</td><td><span class="tag tag-rule">rule</span></td></tr>
+          <tr><td><a href="../backend/finreq/agents/risk.py">risk.py</a></td><td>Risk Analysis</td><td class="wrap">Scores requirements and sets <code>risk_level</code>.</td><td><span class="tag tag-rule">rule</span></td></tr>
+          <tr><td><a href="../backend/finreq/agents/validation.py">validation.py</a></td><td>Validation</td><td class="wrap">NEEDS_CLARIFICATION or PENDING_REVIEW routing.</td><td><span class="tag tag-rule">rule</span></td></tr>
+          <tr><td><a href="../backend/finreq/agents/approval.py">approval.py</a></td><td>Approval (not an agent)</td><td class="wrap"><code>record_decision</code> (L33) for requirements; <code>record_sdlc_signoff</code> (L70) and <code>sdlc_signoffs</code> for the SDLC choice.</td><td><span class="tag tag-human">person</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <p><strong>Why some agents are rule-based.</strong> Quality, conflict, risk, security, validation and the SDLC engine are pure Python so that their judgments can be explained and reproduced for an audit. Interaction, extraction, classification and compliance need a model to read natural language.</p>
+    </div>
+
+    <h3 class="sub">How each agent decides</h3>
+    <div class="stage-grid">
+      <article class="stage">
+        <div class="stage-top"><h3>Interaction</h3><span class="tag tag-llm">LLM</span></div>
+        <p>Looks at the masked transcript across fixed topic areas (such as data collection and retention) and asks a question where a topic is missing or vague. Optional. Answers are appended to the transcript and the run is repeated.</p>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>Extraction</h3><span class="tag tag-llm">LLM</span></div>
+        <p>Prompted to return JSON: statement, priority, acceptance criteria, business justification and a verbatim source excerpt. IDs look like <code>FR-LOAN-001</code> and continue from the highest stored number for that prefix.</p>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>Classification</h3><span class="tag tag-llm">LLM</span></div>
+        <p>Picks one or more of 13 categories: business, stakeholder, functional, security, privacy, regulatory, performance, availability and reliability, usability, data management, integration, audit and reporting, operational and maintenance.</p>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>Quality check</h3><span class="tag tag-rule">rule</span></div>
+        <p>Flags: vague words (&ldquo;fast&rdquo;, &ldquo;appropriate&rdquo;, &ldquo;seamless&rdquo;), no shall/must/will/should, no acceptance criteria, no justification, no source quote, an unknown ALL-CAPS acronym, and absolute promises (&ldquo;100% accuracy&rdquo;, &ldquo;zero downtime&rdquo;). No criteria plus vague language also means not testable.</p>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>Conflict detection</h3><span class="tag tag-rule">rule</span></div>
+        <p>Compares every pair with TF-IDF cosine similarity. At 0.75 or more, a pair that differs by a negation or by numbers (&ldquo;2 seconds&rdquo; vs &ldquo;5 seconds&rdquo;) is a <em>conflict</em>. At 0.92 or more without that difference it is a <em>duplicate</em>.</p>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>Compliance</h3><span class="tag tag-llm">LLM</span></div>
+        <p>Retrieves policy passages, then asks the model which are relevant and what control each requires. Low similarity or &ldquo;not relevant&rdquo; becomes a recorded gap. Details in <a href="#rag">Retrieval (RAG)</a>.</p>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>Security and privacy</h3><span class="tag tag-rule">rule</span></div>
+        <p>Keyword lists (encrypt, MFA, session, token, consent, retention, erasure and more) add the security or privacy category. If it touches those areas and has no compliance mapping without a gap, it adds a missing-control issue for a security or compliance officer.</p>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>Risk analysis</h3><span class="tag tag-rule">rule</span></div>
+        <p>Score = highest category base (0.30 for security, privacy or regulatory; 0.20 for audit) + priority weight (critical 0.30, high 0.20, medium 0.10) + 0.15 per compliance gap (max 0.30) + 0.05 per other issue (max 0.20) + 0.20 if in conflict. Levels: low under 0.25, medium from 0.25, high from 0.50, critical from 0.70.</p>
+      </article>
+      <article class="stage">
+        <div class="stage-top"><h3>Validation</h3><span class="tag tag-rule">rule</span></div>
+        <p>Any ambiguity, incompleteness, not-testable, missing-source, undefined-term, infeasibility or inconsistency issue routes to <em>needs clarification</em>. Otherwise <em>pending review</em>. Compliance gaps and duplicates do not block: they raise the risk score and go to a human.</p>
+      </article>
+    </div>
+
+    <p class="small muted">Retrieval is TF-IDF with cosine similarity over <code>backend/data/knowledge_base/*.md</code>, in <a href="../backend/finreq/retrieval.py">retrieval.py</a> (<code>KnowledgeBase</code> L88). It is dependency-free and fully offline. There is no vector database.</p>
+  </section>
+
+
+  <!-- RAG -->
+  <section id="rag" class="panel" aria-labelledby="rag-title">
+    <div class="panel-head"><span class="num">05</span><h2 id="rag-title">Retrieval (RAG)</h2></div>
+    <p class="lead">RAG means retrieval-augmented generation: look up trusted text first, then let the model answer using only that text. Prism uses it for one job, mapping a requirement to policy. The model never answers from memory about what a policy says.</p>
+
+    <h3 class="sub">The loop, for one requirement</h3>
+    <ol>
+      <li><strong>Retrieve.</strong> <code>KnowledgeBase.retrieve(statement)</code> scores every policy document against the requirement and returns the top 3, each with its source, jurisdiction, effective date, version, a 400-character excerpt and a similarity score.</li>
+      <li><strong>Log.</strong> The retrieval and its scores are written to the audit log.</li>
+      <li><strong>Check confidence.</strong> If the best score is under <code>0.18</code> (or nothing matched), the model is not called. A gap is recorded: &ldquo;no confident compliance mapping found&rdquo;.</li>
+      <li><strong>Generate, grounded.</strong> The prompt lists the passages as numbered evidence and says to use only them and never outside knowledge. The model returns JSON: for each relevant passage, its index, the concrete control the requirement must satisfy, and a gap if the passage is unclear.</li>
+      <li><strong>Attach citations.</strong> Each mapping keeps the passage it came from, its jurisdiction and its similarity as confidence. Indexes outside the evidence list are ignored.</li>
+      <li><strong>Escalate.</strong> If the model says nothing is relevant, or reports a gap, a missing-control issue is added. The risk score rises and a person decides.</li>
+    </ol>
+
+    <div class="grid-2" style="margin-top:16px">
+      <div class="card-mini"><h3>Strong match</h3><p>Score at or above 0.18 and the model finds a control. A mapping is stored with its citation. No gap.</p></div>
+      <div class="card-mini"><h3>Weak match</h3><p>Score under 0.18. No model call. A gap and a missing-control issue say a compliance officer must resolve it.</p></div>
+      <div class="card-mini"><h3>Retrieved but irrelevant</h3><p>Score is fine but the model judges the passage does not apply. Same escalation, worded as &ldquo;evidence not judged relevant&rdquo;.</p></div>
+      <div class="card-mini"><h3>Relevant but incomplete</h3><p>The model maps the control and also states what is missing. The mapping is kept and the gap is shown beside it.</p></div>
+    </div>
+
+    <h3 class="sub">How retrieval works</h3>
+    <ul>
+      <li><strong>Index.</strong> At start-up every <code>.md</code> or <code>.txt</code> file in <code>backend/data/knowledge_base/</code> is read. A header gives <code>source</code>, <code>jurisdiction</code>, <code>effective_date</code>, <code>version</code> and <code>applicability</code>. The bodies are vectorised once with TF-IDF.</li>
+      <li><strong>Query.</strong> The requirement statement is vectorised with the same vocabulary. Cosine similarity against every document gives the scores. Zero scores are dropped.</li>
+      <li><strong>Domain stop words.</strong> &ldquo;system&rdquo;, &ldquo;shall&rdquo;, &ldquo;must&rdquo;, &ldquo;customer&rdquo; and similar words appear in every requirement and every policy. They are removed so real topic words decide the ranking. The 0.18 cut-off was tuned on the sample set: unrelated queries score about 0.10, the weakest true match about 0.20.</li>
+      <li><strong>Provenance.</strong> The header fields travel with each passage into the UI, the compliance matrix and the audit log, so every claim shows where it came from and which version.</li>
+    </ul>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th scope="col">Sample policy (fictional)</th><th scope="col">Covers</th></tr></thead>
+      <tbody>
+        <tr><td><a href="../backend/data/knowledge_base/kyc_onboarding_policy.md">kyc_onboarding_policy.md</a></td><td class="wrap">Identity verification and onboarding.</td></tr>
+        <tr><td><a href="../backend/data/knowledge_base/data_privacy_consent_policy.md">data_privacy_consent_policy.md</a></td><td class="wrap">Personal data, consent, retention.</td></tr>
+        <tr><td><a href="../backend/data/knowledge_base/audit_reporting_policy.md">audit_reporting_policy.md</a></td><td class="wrap">Audit logs and reporting.</td></tr>
+        <tr><td><a href="../backend/data/knowledge_base/transaction_security_policy.md">transaction_security_policy.md</a></td><td class="wrap">Transaction authentication and security.</td></tr>
+        <tr><td><a href="../backend/data/knowledge_base/credit_decisioning_fairness_policy.md">credit_decisioning_fairness_policy.md</a></td><td class="wrap">Fair, explainable credit decisions.</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout warn">
+      <p><strong>Honest limits.</strong> TF-IDF matches words, not meaning, so a paraphrase with no shared vocabulary can score low and become a gap. That is the safe failure: gaps go to a human. The sample policies are fictional, and the output is not legal advice. To use real policies, drop files with the same header into the folder. To use embeddings or a vector database, replace only <a href="../backend/finreq/retrieval.py">retrieval.py</a>: callers use just <code>retrieve()</code>.</p>
+    </div>
+    <p class="small muted">Code: <a href="../backend/finreq/retrieval.py">retrieval.py</a> (<code>KnowledgeBase</code>, <code>_parse_document</code>, <code>DOMAIN_STOP_WORDS</code>) &middot; <a href="../backend/finreq/agents/compliance.py">agents/compliance.py</a> &middot; threshold in <a href="../backend/finreq/config.py">config.py</a> (<code>low_confidence_threshold</code>).</p>
+  </section>
+
+  <!-- Safety plumbing -->
+  <section id="safety" class="panel" aria-labelledby="safety-title">
+    <div class="panel-head"><span class="num">06</span><h2 id="safety-title">Masking and model backends</h2></div>
+
+    <h3 class="sub">Masking: the model never sees real identifiers</h3>
+    <p>Before any agent runs, <code>mask_text()</code> replaces sensitive values with stable placeholders and keeps a reverse map in memory. The same value always gets the same placeholder inside one run, so the model can still tell &ldquo;the same account, mentioned twice&rdquo;. After every agent has finished, the map restores real values into the fields people read.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th scope="col">Kind</th><th scope="col">Placeholder</th><th scope="col">Matches</th></tr></thead>
+      <tbody>
+        <tr><td>Email</td><td><code>[EMAIL_1]</code></td><td class="wrap">name@host.tld</td></tr>
+        <tr><td>Card</td><td><code>[CARD_1]</code></td><td class="wrap">16 digits, with spaces or dashes</td></tr>
+        <tr><td>Aadhaar</td><td><code>[AADHAAR_1]</code></td><td class="wrap">three groups of four digits</td></tr>
+        <tr><td>PAN</td><td><code>[PAN_1]</code></td><td class="wrap">five letters, four digits, one letter</td></tr>
+        <tr><td>IFSC</td><td><code>[IFSC_1]</code></td><td class="wrap">four letters, 0, six characters</td></tr>
+        <tr><td>Phone</td><td><code>[PHONE_1]</code></td><td class="wrap">ten digits starting 6 to 9, optional country code</td></tr>
+        <tr><td>Account</td><td><code>[ACCOUNT_1]</code></td><td class="wrap">any other run of 9 to 18 digits</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted">Specific patterns run first, so a card number is not swallowed by the generic account pattern. This is a regex classifier for a prototype, not a production PII scanner. Names are not masked. See <a href="../backend/finreq/masking.py">masking.py</a>.</p>
+
+    <h3 class="sub">Model backends</h3>
+    <div class="grid-2">
+      <div class="card-mini"><h3>Ollama (default)</h3><p>Local server, no key, nothing leaves the machine. Default <code>qwen2.5:3b-instruct</code>, about three times faster than the 7B fallback but with lower recall. The model picker lists whatever you have pulled.</p></div>
+      <div class="card-mini"><h3>Gemini</h3><p>Google API. Key from <code>GEMINI_API_KEY</code> only, sent in a header, never in a URL. Default <code>gemini-3.5-flash-lite</code>. Retries 429 and 503 with growing waits; a daily-quota failure stops at once.</p></div>
+      <div class="card-mini"><h3>Groq</h3><p>OpenAI-compatible API. Key from <code>GROQ_API_KEY</code> only. Default <code>openai/gpt-oss-120b</code> with low reasoning effort. Uses JSON mode. The server fetches the model list so only ids reach the browser.</p></div>
+      <div class="card-mini"><h3>Fake client (tests)</h3><p><code>FakeLLMClient</code> returns scripted answers, so the whole suite and the API tests run with no model and no network.</p></div>
+    </div>
+    <h3 class="sub">Making small models dependable</h3>
+    <ul>
+      <li><strong>JSON repair.</strong> <code>generate_json()</code> parses the reply. On failure it re-prompts with the bad output and the parse error, up to two retries, then raises <code>LLMError</code>.</li>
+      <li><strong>Unwrap.</strong> Small models often wrap one object in a one-item array. <code>unwrap_single()</code> removes the wrapper in one place for interaction, classification and compliance.</li>
+      <li><strong>Audit.</strong> <code>Agent.call_llm_json()</code> logs every call, so the audit trail shows each model call for a project.</li>
+      <li><strong>Keys.</strong> Nothing accepts a key through a flag, API route or UI field. Error messages carry the provider text, never the key.</li>
+    </ul>
+    <p class="small muted">Code: <a href="../backend/finreq/llm.py">llm.py</a> (<code>build_llm_client</code>, <code>generate_json</code>, <code>unwrap_single</code>) &middot; <a href="../backend/finreq/config.py">config.py</a>.</p>
+  </section>
+
+  <!-- Data -->
+  <section id="data" class="panel" aria-labelledby="data-title">
+    <div class="panel-head"><span class="num">07</span><h2 id="data-title">Data and storage</h2></div>
+    <p class="lead">Everything is a pydantic model in <a href="../backend/finreq/models.py">models.py</a>, saved to one SQLite file by <a href="../backend/finreq/storage.py">storage.py</a>.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th scope="col">Record</th><th scope="col">Holds</th></tr></thead>
+      <tbody>
+        <tr><td><code>Requirement</code></td><td class="wrap">Statement, categories, priority, acceptance criteria, justification, source excerpt, quality issues, compliance mappings, applicable regulations, confidence, duplicate and conflict links, risk level, approval status.</td></tr>
+        <tr><td><code>Evidence</code> and <code>ComplianceMapping</code></td><td class="wrap">A retrieved passage with source, jurisdiction, version and similarity; and the requirement-to-policy mapping with its control, gap and confidence.</td></tr>
+        <tr><td><code>RiskItem</code></td><td class="wrap">One risk-register row: category (compliance, security, technical, business), likelihood, impact, level and mitigation.</td></tr>
+        <tr><td><code>ApprovalRecord</code></td><td class="wrap">One human decision or sign-off: who, which role, what, when.</td></tr>
+        <tr><td><code>AuditEvent</code></td><td class="wrap">One logged step: agent, event type, payload, time.</td></tr>
+      </tbody>
+    </table></div>
+    <p>Tables: <code>requirements</code>, <code>risks</code>, <code>approvals</code>, <code>analyses</code> (the projects list: settings, transcript, stages, SDLC factors and choice) and <code>audit_log</code>. Deleting a project removes only its <code>analyses</code> row; decisions and audit events stay and the deletion is itself logged.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th scope="col">Status</th><th scope="col">Meaning</th></tr></thead>
+      <tbody>
+        <tr><td><code>draft</code></td><td class="wrap">Extracted, not yet checked.</td></tr>
+        <tr><td><code>needs_clarification</code></td><td class="wrap">Validation found a quality gap.</td></tr>
+        <tr><td><code>pending_review</code></td><td class="wrap">Passed the automated checks, waiting for a person.</td></tr>
+        <tr><td><code>approved</code> / <code>rejected</code></td><td class="wrap">A person decided.</td></tr>
+        <tr><td><code>needs_regeneration</code></td><td class="wrap">A person asked for a rewrite.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- 5. Code map -->
+  <section id="code" class="panel" aria-labelledby="code-title">
+    <div class="panel-head">
+      <span class="num">08</span>
+      <h2 id="code-title">Code map</h2>
+    </div>
+    <p class="lead">Every important file, grouped by layer. Line references point to the definitions named in the table.</p>
+
+    <h3 class="sub">Backend core (<code>backend/finreq/</code>)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">File</th><th scope="col">Role</th><th scope="col">Key lines</th></tr></thead>
+        <tbody>
+          <tr><td><a href="../backend/finreq/config.py">config.py</a></td><td class="wrap">Settings: model, thresholds, database path. The single source of truth. Loads <code>.env</code> into the environment.</td><td>&mdash;</td></tr>
+          <tr><td><a href="../backend/finreq/pipeline.py">pipeline.py</a></td><td class="wrap">The coordinator. Runs every agent in order, then saves.</td><td>run_pipeline L59, mask L97, extraction L109, compliance L123, risk L131, unmask and save L136</td></tr>
+          <tr><td><a href="../backend/finreq/models.py">models.py</a></td><td class="wrap">Pydantic models and enums: Requirement, RiskItem, ComplianceMapping, Evidence, QualityIssue, ApprovalRecord, AuditEvent.</td><td>Requirement L101, RiskItem L130, AuditEvent L152</td></tr>
+          <tr><td><a href="../backend/finreq/masking.py">masking.py</a></td><td class="wrap">Regex PII masking and unmasking.</td><td>mask_text L42</td></tr>
+          <tr><td><a href="../backend/finreq/llm.py">llm.py</a></td><td class="wrap">LLM clients. <code>generate_json()</code> retries invalid JSON. <code>unwrap_single()</code> undoes a one-item array wrapper from small models.</td><td>LLMClient L29, generate_json L36, unwrap_single L61, OllamaClient L98, GeminiClient L128, GroqClient L225, build_llm_client L338, FakeLLMClient L351</td></tr>
+          <tr><td><a href="../backend/finreq/retrieval.py">retrieval.py</a></td><td class="wrap">TF-IDF knowledge base over the sample policies.</td><td>KnowledgeBase L88</td></tr>
+          <tr><td><a href="../backend/finreq/storage.py">storage.py</a></td><td class="wrap">SQLite store for requirements, risks, approvals, audit events and analyses (projects). <code>check_same_thread=False</code>.</td><td>Store L45, in_memory_store L151</td></tr>
+          <tr><td><a href="../backend/finreq/sdlc.py">sdlc.py</a></td><td class="wrap">SDLC selection engine: factors, weighted ranking, workflows and the plan.</td><td>derive_factors L75, rank L111, workflow L204, render_plan L208</td></tr>
+          <tr><td><a href="../backend/finreq/artifacts.py">artifacts.py</a></td><td class="wrap">Documentation agent. Writes the SRS, user stories, CSV matrices, open issues and SDLC plan.</td><td>generate_all_artifacts L180</td></tr>
+          <tr><td><a href="../backend/finreq/__init__.py">__init__.py</a></td><td class="wrap">Package marker.</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">Agents (<code>backend/finreq/agents/</code>)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">File</th><th scope="col">Role</th><th scope="col">Key lines</th></tr></thead>
+        <tbody>
+          <tr><td><a href="../backend/finreq/agents/base.py">base.py</a></td><td class="wrap">Agent base class and shared context with audit logging.</td><td>AgentContext L25, Agent L36</td></tr>
+          <tr><td><a href="../backend/finreq/agents/interaction.py">interaction.py</a></td><td class="wrap">Clarifying questions (LLM).</td><td>StakeholderInteractionAgent L52</td></tr>
+          <tr><td><a href="../backend/finreq/agents/extraction.py">extraction.py</a></td><td class="wrap">Requirement extraction (LLM).</td><td>ExtractionAgent L33</td></tr>
+          <tr><td><a href="../backend/finreq/agents/classification.py">classification.py</a></td><td class="wrap">Multi-label classification (LLM).</td><td>ClassificationAgent L20</td></tr>
+          <tr><td><a href="../backend/finreq/agents/quality.py">quality.py</a></td><td class="wrap">Quality checks (rule-based).</td><td>QualityCheckAgent L46</td></tr>
+          <tr><td><a href="../backend/finreq/agents/conflict.py">conflict.py</a></td><td class="wrap">Duplicate and conflict detection (rule-based).</td><td>ConflictDetectionAgent L40</td></tr>
+          <tr><td><a href="../backend/finreq/agents/compliance.py">compliance.py</a></td><td class="wrap">Policy mapping with cited evidence (LLM).</td><td>ComplianceAgent L26</td></tr>
+          <tr><td><a href="../backend/finreq/agents/security.py">security.py</a></td><td class="wrap">Security and privacy review (rule-based).</td><td>SecurityPrivacyAgent L29</td></tr>
+          <tr><td><a href="../backend/finreq/agents/risk.py">risk.py</a></td><td class="wrap">Risk scoring (rule-based).</td><td>assess L63, RiskAnalysisAgent L101</td></tr>
+          <tr><td><a href="../backend/finreq/agents/validation.py">validation.py</a></td><td class="wrap">Routing to clarification or review (rule-based).</td><td>ValidationAgent L30</td></tr>
+          <tr><td><a href="../backend/finreq/agents/approval.py">approval.py</a></td><td class="wrap">The only place approval status changes. Also records SDLC sign-offs.</td><td>record_decision L33, record_sdlc_signoff L70</td></tr>
+          <tr><td><a href="../backend/finreq/agents/__init__.py">__init__.py</a></td><td class="wrap">Package marker.</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">API server (<code>backend/server.py</code>)</h3>
+    <p>FastAPI app. Analyses run in a background thread, and the client polls for stage progress. The app serves <code>frontend/dist</code>: <code>index.html</code> is <code>no-cache</code> and hashed assets are <code>immutable</code>. <code>create_app(store, llm_factory)</code> is injectable for tests (L133).</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Method and route</th><th scope="col">Line</th><th scope="col">Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>GET /api/config</code></td><td>L219</td><td class="wrap">Backend and model defaults.</td></tr>
+          <tr><td><code>GET /api/groq/models</code></td><td>L234</td><td class="wrap">Groq chat models, cached for an hour; ids only.</td></tr>
+          <tr><td><code>GET /api/ollama/models</code></td><td>L240</td><td class="wrap">Models pulled into the local Ollama server, for the model picker.</td></tr>
+          <tr><td><code>POST /api/analyses</code></td><td>L245</td><td class="wrap">Start an analysis (202). Runs in a thread.</td></tr>
+          <tr><td><code>GET /api/analyses</code></td><td>L259</td><td class="wrap">The project list.</td></tr>
+          <tr><td><code>GET /api/analyses/{id}</code></td><td>L275</td><td class="wrap">One analysis, with progress and stages.</td></tr>
+          <tr><td><code>DELETE /api/analyses/{id}</code></td><td>L279</td><td class="wrap">Remove a project from the list (refused while running). Its requirements and audit events stay.</td></tr>
+          <tr><td><code>POST /api/analyses/{id}/requirements/{req_id}/decision</code></td><td>L290</td><td class="wrap">Accept, reject, edit or regenerate one requirement.</td></tr>
+          <tr><td><code>POST /api/analyses/{id}/bulk-accept</code></td><td>L308</td><td class="wrap">Accept many requirements at once.</td></tr>
+          <tr><td><code>PUT /api/analyses/{id}/sdlc</code></td><td>L318</td><td class="wrap">Save the project profile and the chosen delivery model.</td></tr>
+          <tr><td><code>POST /api/analyses/{id}/sdlc/signoff</code></td><td>L333</td><td class="wrap">Record one of the four role sign-offs.</td></tr>
+          <tr><td><code>GET /api/analyses/{id}/export</code></td><td>L342</td><td class="wrap">Zip of the nine artefacts.</td></tr>
+          <tr><td><code>GET /api/audit</code></td><td>L357</td><td class="wrap">Audit events, scoped to an analysis or to everything.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">Entry points, scripts and evaluation</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">File</th><th scope="col">Role</th><th scope="col">Key lines</th></tr></thead>
+        <tbody>
+          <tr><td><a href="../backend/cli.py">backend/cli.py</a></td><td class="wrap">Headless run: per-stage progress, requirements, the top three SDLC models and the artefacts. <code>--backend</code>, <code>--model</code> and <code>--profile</code> flags.</td><td>main L34</td></tr>
+          <tr><td><a href="../backend/scripts/gates.py">backend/scripts/gates.py</a></td><td class="wrap">Delivery gates shared by local runs and CI: tests, eval floors, bandit, secret scan, front-end build with npm audit, and pip-audit.</td><td>main L93, gate_secrets L77</td></tr>
+          <tr><td><a href="../backend/eval/evaluate.py">backend/eval/evaluate.py</a></td><td class="wrap">Offline quality and conflict benchmarks, plus the live extraction eval against the gold set.</td><td>main L176, run_live_extraction_eval L118</td></tr>
+          <tr><td><a href="../backend/eval/gold_requirements.json">eval/gold_requirements.json</a>, <a href="../backend/eval/quality_benchmark.json">quality_benchmark.json</a>, <a href="../backend/eval/conflict_benchmark.json">conflict_benchmark.json</a></td><td class="wrap">Hand-labelled gold data and benchmark cases.</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">Web front end (<code>web/</code>)</h3>
+    <p>React 19, Vite, Tailwind v4 and shadcn/ui. The brand is Prism. Tokens live once in <a href="../frontend/src/index.css">index.css</a>, and the design is specified in <a href="../DESIGN.md">DESIGN.md</a>.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">File</th><th scope="col">Role</th><th scope="col">Key lines</th></tr></thead>
+        <tbody>
+          <tr><td><a href="../frontend/src/App.tsx">App.tsx</a></td><td class="wrap">The state machine: start, run, failed and steps. Polling, the address bar, and the scoped decision history.</td><td>App L41</td></tr>
+          <tr><td><a href="../frontend/src/main.tsx">main.tsx</a></td><td class="wrap">React entry point.</td><td>&mdash;</td></tr>
+          <tr><td><a href="../frontend/src/index.css">index.css</a></td><td class="wrap">Single colour and radius token source, for light (<code>:root</code>) and dark (<code>.dark</code>).</td><td>&mdash;</td></tr>
+          <tr><td><a href="../frontend/src/lib/api.ts">lib/api.ts</a></td><td class="wrap">Typed client for every <code>/api</code> route.</td><td>api L64</td></tr>
+          <tr><td><a href="../frontend/src/lib/motion.ts">lib/motion.ts</a></td><td class="wrap">Shared motion springs, easing and variants (<code>motion/react</code> only).</td><td>&mdash;</td></tr>
+          <tr><td><a href="../frontend/src/components/InputPanel.tsx">InputPanel.tsx</a></td><td class="wrap">The composer: project name, upload or drop a .txt, sample, follow-up switch, model choice.</td><td>InputPanel L28</td></tr>
+          <tr><td><a href="../frontend/src/components/RunView.tsx">RunView.tsx</a></td><td class="wrap">The live run view. <code>PLANNED_STAGES</code> mirrors the backend stage labels.</td><td>PLANNED_STAGES L11</td></tr>
+          <tr><td><a href="../frontend/src/components/review/ReviewStep.tsx">review/ReviewStep.tsx</a></td><td class="wrap">Review step: filters, keyboard shortcuts, list or risk map.</td><td>ReviewStep L29</td></tr>
+          <tr><td><a href="../frontend/src/components/review/Inspector.tsx">review/Inspector.tsx</a></td><td class="wrap">Evidence trace and decision bar for one requirement.</td><td>&mdash;</td></tr>
+          <tr><td><a href="../frontend/src/components/review/RiskMap.tsx">review/RiskMap.tsx</a>, <a href="../frontend/src/components/review/RequirementList.tsx">RequirementList.tsx</a>, <a href="../frontend/src/components/review/QuestionsSheet.tsx">QuestionsSheet.tsx</a></td><td class="wrap">Risk map, requirement list and follow-up questions sheet.</td><td>&mdash;</td></tr>
+          <tr><td><a href="../frontend/src/components/DeliveryStep.tsx">DeliveryStep.tsx</a></td><td class="wrap">Ranked delivery models, the workflow timeline, the profile sliders and the sign-off card.</td><td>DeliveryStep L23</td></tr>
+          <tr><td><a href="../frontend/src/components/ExportStep.tsx">ExportStep.tsx</a></td><td class="wrap">Readiness checklist and the zip download.</td><td>ExportStep L27</td></tr>
+          <tr><td><a href="../frontend/src/components/AuditSheet.tsx">AuditSheet.tsx</a></td><td class="wrap">Audit trail sheet: decisions and model calls.</td><td>&mdash;</td></tr>
+          <tr><td><a href="../frontend/src/components/ProjectsList.tsx">ProjectsList.tsx</a></td><td class="wrap">Recent projects on the start screen, and the full Projects sheet.</td><td>&mdash;</td></tr>
+          <tr><td><a href="../frontend/src/components/Hero.tsx">Hero.tsx</a>, <a href="../frontend/src/components/HeroPreview.tsx">HeroPreview.tsx</a>, <a href="../frontend/src/components/HeroGradient.tsx">HeroGradient.tsx</a></td><td class="wrap">Start screen: headline, calls to action, the looping product preview, and the one lazy WebGL backdrop.</td><td>&mdash;</td></tr>
+          <tr><td><a href="../frontend/src/components/TopBar.tsx">TopBar.tsx</a>, <a href="../frontend/src/components/StepRail.tsx">StepRail.tsx</a>, <a href="../frontend/src/components/ThemeToggle.tsx">ThemeToggle.tsx</a>, <a href="../frontend/src/components/Logo.tsx">Logo.tsx</a></td><td class="wrap">Top bar, the four-step rail, the theme switch, and the Prism mark and <code>BRAND</code> constant.</td><td>&mdash;</td></tr>
+          <tr><td><a href="../frontend/src/components/RolePicker.tsx">RolePicker.tsx</a></td><td class="wrap">Role dropdown for "Switch to" on sign-offs and reviewer roles.</td><td>&mdash;</td></tr>
+          <tr><td><a href="../frontend/src/components/kit.tsx">kit.tsx</a>, <a href="../frontend/src/components/pills.tsx">pills.tsx</a></td><td class="wrap">Shared primitives (IconTile, ProgressBar, Donut, CheckStamp and others), and the <code>TONE</code> status and risk pills.</td><td>&mdash;</td></tr>
+          <tr><td><a href="../frontend/src/components/ui/">components/ui/</a></td><td class="wrap">shadcn primitives: Sheet, Tooltip, HoverCard, DropdownMenu, ToggleGroup, Collapsible, Switch, Slider, Tabs and others.</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">Tests (<code>tests/</code>)</h3>
+    <p>Run with <code>python -m pytest</code>. The LLM is replaced by <code>FakeLLMClient</code>, the API runs under <code>TestClient</code>. <code>pyproject.toml</code> sets <code>pythonpath</code> to <code>backend</code>; run it from the repo root.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">File</th><th scope="col">What it covers</th></tr></thead>
+        <tbody>
+          <tr><td><a href="../backend/tests/test_pipeline_integration.py">test_pipeline_integration.py</a></td><td class="wrap">The whole pipeline end to end.</td></tr>
+          <tr><td><a href="../backend/tests/test_api.py">test_api.py</a></td><td class="wrap">The FastAPI routes.</td></tr>
+          <tr><td><a href="../backend/tests/test_quality.py">test_quality.py</a>, <a href="../backend/tests/test_conflict.py">test_conflict.py</a>, <a href="../backend/tests/test_risk.py">test_risk.py</a>, <a href="../backend/tests/test_validation_and_approval.py">test_validation_and_approval.py</a></td><td class="wrap">The rule-based agents and the approval rules.</td></tr>
+          <tr><td><a href="../backend/tests/test_compliance.py">test_compliance.py</a>, <a href="../backend/tests/test_retrieval.py">test_retrieval.py</a></td><td class="wrap">Policy mapping and TF-IDF retrieval.</td></tr>
+          <tr><td><a href="../backend/tests/test_llm.py">test_llm.py</a>, <a href="../backend/tests/test_gemini_client.py">test_gemini_client.py</a>, <a href="../backend/tests/test_groq_client.py">test_groq_client.py</a></td><td class="wrap">JSON repair, request and response shapes, and missing-key paths, with mocked HTTP.</td></tr>
+          <tr><td><a href="../backend/tests/test_masking.py">test_masking.py</a>, <a href="../backend/tests/test_security.py">test_security.py</a></td><td class="wrap">PII masking and the security agent.</td></tr>
+          <tr><td><a href="../backend/tests/test_sdlc.py">test_sdlc.py</a>, <a href="../backend/tests/test_artifacts.py">test_artifacts.py</a>, <a href="../backend/tests/test_storage.py">test_storage.py</a></td><td class="wrap">The SDLC engine, the generated artefacts and the store.</td></tr>
+          <tr><td><a href="../backend/tests/test_gates.py">test_gates.py</a></td><td class="wrap">The delivery gates script.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">Data (<code>data/</code>) and docs</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Path</th><th scope="col">Contents</th></tr></thead>
+        <tbody>
+          <tr><td><a href="../backend/data/knowledge_base/">backend/data/knowledge_base/*.md</a></td><td class="wrap">Sample policies. Fictional, each with a provenance header.</td></tr>
+          <tr><td><a href="../backend/data/fixtures/">backend/data/fixtures/</a></td><td class="wrap"><code>loan_officer_interview.txt</code>, <code>loan_project_profile.json</code>, <code>problem_statement.txt</code>.</td></tr>
+          <tr><td><a href="../docs/SDLC.md">docs/SDLC.md</a></td><td class="wrap">How FinReq was built: model choice, sprint log, gates, threat table and test levels.</td></tr>
+          <tr><td><a href="../docs/finreq_project_profile.json">docs/finreq_project_profile.json</a>, <a href="../docs/finreq_self_analysis/">docs/finreq_self_analysis/</a></td><td class="wrap">FinReq's own SDLC profile, and its analysis of its own problem statement.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 6. SDLC engine -->
+  <section id="sdlc" class="panel" aria-labelledby="sdlc-title">
+    <div class="panel-head">
+      <span class="num">09</span>
+      <h2 id="sdlc-title">The SDLC engine</h2>
+    </div>
+    <p class="lead"><a href="../backend/finreq/sdlc.py">sdlc.py</a> recommends a delivery model. It is deliberately not part of <code>run_pipeline()</code>, because it depends on a project profile that a person supplies. It is recomputed whenever a slider moves: <code>rank(derive_factors(reqs, profile))</code>.</p>
+    <div class="two-col">
+      <div class="card-mini">
+        <h3><code>derive_factors</code> <span class="muted small">L75</span></h3>
+        <p>Four factors come from the requirements. Nine come from the project profile. A profile value can override a derived one. Requirement stability measures how clear the requirements are, not how often scope changes; volatility belongs in the human-set change-frequency factor.</p>
+      </div>
+      <div class="card-mini">
+        <h3><code>rank</code> <span class="muted small">L111</span></h3>
+        <p>Weighted multi-criteria scoring, which is explainable term by term. It sorts on the unrounded score, so two models that round to the same percentage are still ordered. Ten models are ranked, and the top five are shown first.</p>
+      </div>
+      <div class="card-mini">
+        <h3><code>workflow</code> <span class="muted small">L204</span></h3>
+        <p>Phases for each model, with financial controls built in and exit gates for each phase. <code>render_plan</code> (L208) turns the chosen model into the SDLC plan artefact.</p>
+      </div>
+      <div class="card-mini">
+        <h3>Four sign-offs</h3>
+        <p>Project manager, architect, security lead and compliance officer (<code>SDLC_APPROVER_ROLES</code>). A choice is baselined only when all four have signed off on that specific model. Sign-offs are approval records in the audit trail.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Security and audit -->
+  <section id="security" class="panel" aria-labelledby="security-title">
+    <div class="panel-head">
+      <span class="num">10</span>
+      <h2 id="security-title">Security and audit</h2>
+    </div>
+    <p class="lead">Prism is a prototype. It implements the controls below and states plainly what it does not.</p>
+    <div class="two-col">
+      <div class="card-mini">
+        <h3>Implemented</h3>
+        <ul class="clean">
+          <li><strong>PII masking boundary.</strong> The transcript is masked once at ingestion, before any LLM call. Real values are restored only after every agent has run, and only in human-facing fields. Prompts stay masked throughout.</li>
+          <li><strong>Audit events.</strong> Every LLM call and every retrieval is an <code>AuditEvent</code> (<a href="../backend/finreq/models.py">models.py</a> L152).</li>
+          <li><strong>Approval records.</strong> Every human decision on a requirement or an SDLC sign-off is an <code>ApprovalRecord</code> (L141). Only <code>agents/approval.py</code> changes approval status after validation.</li>
+          <li><strong>Environment-only keys.</strong> <code>GEMINI_API_KEY</code> and <code>GROQ_API_KEY</code> are read only from the shell or the gitignored <code>.env</code>. Gemini uses the <code>x-goog-api-key</code> header and Groq a Bearer header, so keys never appear in URLs, logs or the UI. Key-shaped strings outside <code>.env</code> fail the secret-scan gate.</li>
+          <li><strong>Gates.</strong> <code>backend/scripts/gates.py</code> runs tests, eval floors (quality F1 at least 0.95, conflict accuracy at least 0.85), bandit, a secret scan of git-tracked files, the front-end build with npm audit, and pip-audit. CI runs the same script.</li>
+          <li><strong>Offline retrieval.</strong> Policy lookup needs no network.</li>
+        </ul>
+      </div>
+      <div class="card-mini">
+        <h3>Not implemented</h3>
+        <ul class="clean">
+          <li>Role-based access control (RBAC). The "reviewing as" role is a label, not an access check.</li>
+          <li>Multi-factor authentication (MFA).</li>
+          <li>Encryption at rest. The SQLite database is plain.</li>
+          <li>Session isolation.</li>
+        </ul>
+        <div class="callout warn">
+          <p>Out of scope for a prototype. Compliance output is a mapping for human review, not legal advice.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Known limitations -->
+  <section id="limits" class="panel" aria-labelledby="limits-title">
+    <div class="panel-head">
+      <span class="num">11</span>
+      <h2 id="limits-title">Known limitations</h2>
+    </div>
+    <p class="lead">These were found in real runs, not hypothetically. The project notes list them in full.</p>
+    <ul class="clean">
+      <li><strong>Small models sometimes omit business justifications.</strong> The 3B model can leave every justification out of a run. Every requirement is then flagged incomplete, and the stability factor drops to 0. The rules are working as intended; rerun or use the 7B model.</li>
+      <li><strong>Small models wrap one object in an array.</strong> Fixed in <code>unwrap_single()</code>, used by interaction, classification and compliance.</li>
+      <li><strong>Duplicate detection misses paraphrases.</strong> TF-IDF cannot see meaning. Semantic embeddings would be needed (conflict benchmark case C2).</li>
+      <li><strong>The 7B model is conservative about compliance.</strong> Clearly related policies are escalated as gaps. Do not lower the threshold to hide them; a gap goes to a human, which is the safe failure mode.</li>
+      <li><strong>Audit events carry no analysis id.</strong> The audit tab picks a run's model calls by time window, so two runs started at the same moment would show each other's calls. Decisions are matched exactly.</li>
+      <li><strong>Sample policies are fictional.</strong> The knowledge base is labelled as fictional, so compliance output is not legal advice.</li>
+      <li><strong>Free-tier keys hit limits.</strong> One analysis can exceed the Gemini free quota. Retries wait for Google's delay, but a wait over 60 seconds fails at once. Groq behaves the same way. Groq has not yet been measured with the live eval.</li>
+      <li><strong>Stale SQLite threads.</strong> <code>Store</code> needs <code>check_same_thread=False</code> because the API serves requests and runs analyses on different threads. Check this again if SQLite is ever replaced.</li>
+    </ul>
+    <div class="callout">
+      <p><strong>Measured model results</strong> are in <a href="../ARCHITECTURE.md">ARCHITECTURE.md</a>. On the loan-officer fixture, the 3B default reaches F1 0.692 in about 81 seconds, and the 7B fallback reaches F1 0.774 in about 211 seconds. Each row is a single run.</p>
+    </div>
+  </section>
+
+  <!-- 9. Guides -->
+  <section id="guides" class="panel" aria-labelledby="guides-title">
+    <div class="panel-head">
+      <span class="num">12</span>
+      <h2 id="guides-title">More guides</h2>
+    </div>
+    <p class="lead">Companion documents in this folder and the repository.</p>
+    <div class="grid-2">
+      <a class="guide-card" href="rishith.md"><b>rishith.md</b><p>Companion guide.</p></a>
+      <a class="guide-card" href="flowchart.md"><b>flowchart.md</b><p>Flowcharts of the system.</p></a>
+      <a class="guide-card" href="../README.md"><b>README.md</b><p>Setup, the browser flow, the CLI and the checks.</p></a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Prism (repo and package name FinReq). Sample data is fictional. This guide describes the codebase; it is not legal or financial advice.
+</footer>
+
+<script>
+  (function () {
+    /* Theme toggle: two states, starting from the saved choice or the system theme. */
+    var root = document.documentElement;
+    var btn = document.getElementById("theme-toggle");
+    var mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+
+    function effective() {
+      var t = root.getAttribute("data-theme");
+      if (t === "light" || t === "dark") return t;
+      return mq && mq.matches ? "dark" : "light";
+    }
+    function label() {
+      var dark = effective() === "dark";
+      btn.textContent = dark ? "Light mode" : "Dark mode";
+      btn.setAttribute("aria-pressed", String(dark));
+    }
+    btn.addEventListener("click", function () {
+      var next = effective() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("prism-guide-theme", next); } catch (e) { /* storage blocked */ }
+      label();
+    });
+    if (mq && mq.addEventListener) mq.addEventListener("change", function () {
+      if (!root.getAttribute("data-theme")) label();
+    });
+    label();
+
+    /* Highlight the nav link for the section in view. */
+    var links = document.querySelectorAll(".navlinks a");
+    var sections = [];
+    links.forEach(function (a) {
+      var el = document.querySelector(a.getAttribute("href"));
+      if (el) sections.push({ el: el, a: a });
+    });
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          sections.forEach(function (s) { s.a.classList.toggle("active", s.el === e.target); });
+        });
+      }, { rootMargin: "-40% 0px -55% 0px" });
+      sections.forEach(function (s) { io.observe(s.el); });
+    }
+  })();
+</script>
+</body>
+</html>

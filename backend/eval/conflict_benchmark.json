@@ -1,0 +1,50 @@
+[
+  {
+    "id": "C1",
+    "a": "The system shall send an SMS alert after each disbursement.",
+    "b": "The system shall send an SMS alert after each disbursement.",
+    "expected": "duplicate"
+  },
+  {
+    "id": "C2",
+    "a": "The system shall send an SMS alert after each loan disbursement.",
+    "b": "The system shall send an SMS notification after every loan disbursement.",
+    "expected": "duplicate"
+  },
+  {
+    "id": "C3",
+    "a": "The system shall approve loan applications within 2 seconds.",
+    "b": "The system shall approve loan applications within 5 seconds.",
+    "expected": "conflict"
+  },
+  {
+    "id": "C4",
+    "a": "The system shall allow manual override of credit decisions.",
+    "b": "The system shall not allow manual override of credit decisions.",
+    "expected": "conflict"
+  },
+  {
+    "id": "C5",
+    "a": "The system shall retain completed loan records for at least 3 years.",
+    "b": "The system shall retain completed loan records for at least 7 years.",
+    "expected": "conflict"
+  },
+  {
+    "id": "C6",
+    "a": "The system shall encrypt customer data at rest using AES-256.",
+    "b": "The system shall encrypt all customer data at rest using AES-256.",
+    "expected": "duplicate"
+  },
+  {
+    "id": "C7",
+    "a": "The system shall send an SMS alert after each disbursement.",
+    "b": "The system shall encrypt customer data at rest using AES-256.",
+    "expected": "none"
+  },
+  {
+    "id": "C8",
+    "a": "The system shall return a credit decision within 5 seconds for auto-approved applications.",
+    "b": "The system shall update the visible application status within 1 minute of a reviewer's action.",
+    "expected": "none"
+  }
+]

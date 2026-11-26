@@ -1,0 +1,198 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Single token source. Values and roles: ../../DESIGN.md (v3). Every text pair
+   here is checked to >= 4.5:1 in both themes (see DESIGN.md). */
+:root {
+  color-scheme: light;
+  --ink: #0a1530;              /* hero and top bar: the brand surface, same in both themes */
+  --ink-foreground: #ffffff;
+  --ink-muted: #b6bccb;
+  --brand: #2563eb;            /* the logo's blue: fixed, unlike --primary */
+  --hero-accent: #7dd3fc;      /* hero highlights only: headline phrase, preview stamp */
+  --signal: #38bdf8;           /* live AI activity only: running stage, progress */
+  --background: #f5f6f8;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --primary-hover: #1d4ed8;
+  --primary-soft: #eef4ff;
+  --secondary: #eef0f4;
+  --secondary-foreground: #0f172a;
+  --muted: #eef0f4;
+  --muted-foreground: #475569;
+  --subtle-foreground: #5b6577;
+  --accent: #eef0f4;
+  --accent-foreground: #0f172a;
+  --destructive: #b91c1c;
+  --border: #e3e6ec;
+  --border-strong: #cfd4dc;
+  --input: #e3e6ec;
+  --ring: #2563eb;
+  --success: #047857;
+  --success-soft: #ecfdf5;
+  --success-border: #a7f3d0;
+  --warning: #b45309;
+  --warning-soft: #fffbeb;
+  --warning-border: #fde68a;
+  --danger: #b91c1c;
+  --danger-soft: #fef2f2;
+  --danger-border: #fecaca;
+  --radius: 0.625rem;
+  --elev-panel: 0 0 0 1px rgb(15 23 42 / 0.06), 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -6px rgb(15 23 42 / 0.10);
+  --elev-float: 0 0 0 1px rgb(15 23 42 / 0.06), 0 2px 4px rgb(15 23 42 / 0.04), 0 24px 64px -16px rgb(10 21 48 / 0.35);
+  --elev-lift: 0 0 0 1px rgb(15 23 42 / 0.08), 0 4px 8px rgb(15 23 42 / 0.05), 0 16px 32px -12px rgb(15 23 42 / 0.18);
+}
+
+/* Dark: ink-family surfaces, a light primary with ink text. */
+.dark {
+  color-scheme: dark;
+  --background: #080e1f;
+  --foreground: #e8ecf5;
+  --card: #0f1830;
+  --card-foreground: #e8ecf5;
+  --popover: #121c36;
+  --popover-foreground: #e8ecf5;
+  --primary: #60a5fa;
+  --primary-foreground: #0a1530;
+  --primary-hover: #93c5fd;
+  --primary-soft: #132447;
+  --secondary: #16213d;
+  --secondary-foreground: #e8ecf5;
+  --muted: #16213d;
+  --muted-foreground: #a9b3c9;
+  --subtle-foreground: #8e99b3;
+  --accent: #16213d;
+  --accent-foreground: #e8ecf5;
+  --destructive: #f87171;
+  --border: #1f2c4b;
+  --border-strong: #2c3b5f;
+  --input: #1f2c4b;
+  --ring: #60a5fa;
+  --success: #34d399;
+  --success-soft: #0b2a24;
+  --success-border: #14532d;
+  --warning: #fbbf24;
+  --warning-soft: #2a2007;
+  --warning-border: #713f12;
+  --danger: #f87171;
+  --danger-soft: #2d1218;
+  --danger-border: #7f1d1d;
+  --elev-panel: 0 0 0 1px rgb(255 255 255 / 0.06), 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -6px rgb(0 0 0 / 0.45);
+  --elev-float: 0 0 0 1px rgb(255 255 255 / 0.08), 0 2px 4px rgb(0 0 0 / 0.3), 0 24px 64px -16px rgb(0 0 0 / 0.6);
+  --elev-lift: 0 0 0 1px rgb(255 255 255 / 0.1), 0 4px 8px rgb(0 0 0 / 0.3), 0 16px 32px -12px rgb(0 0 0 / 0.55);
+}
+
+@theme inline {
+  --font-sans: "Geist Variable", system-ui, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-mono: "Geist Mono Variable", ui-monospace, monospace;
+  --color-ink: var(--ink);
+  --color-ink-foreground: var(--ink-foreground);
+  --color-ink-muted: var(--ink-muted);
+  --color-hero-accent: var(--hero-accent);
+  --color-brand: var(--brand);
+  --color-signal: var(--signal);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-success-border: var(--success-border);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-border: var(--warning-border);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-border: var(--danger-border);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --shadow-panel: var(--elev-panel);
+  --shadow-float: var(--elev-float);
+  --shadow-lift: var(--elev-lift);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  /* Thin, theme-coloured scrollbars everywhere: the Windows default (grey track, arrow
+     buttons) clashed with both themes. scrollbar-color inherits; scrollbar-width does not. */
+  * {
+    scrollbar-width: thin;
+  }
+  html {
+    scrollbar-color: color-mix(in oklch, var(--foreground) 24%, transparent) transparent;
+    /* Keep the scrollbar's space when a Sheet locks scrolling, so the page never shifts
+       sideways; react-remove-scroll then must not add its own compensating margin. */
+    scrollbar-gutter: stable;
+  }
+  html body[data-scroll-locked] {
+    margin-right: 0 !important;
+  }
+  body {
+    @apply bg-background text-sm text-foreground antialiased;
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.5;
+  }
+  h1, h2, h3 {
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  ::selection {
+    background: color-mix(in oklch, var(--primary) 28%, transparent);
+  }
+  kbd {
+    @apply inline-grid min-w-5 place-items-center rounded border border-border-strong bg-card px-1 font-mono text-[11px] leading-4 text-foreground;
+    box-shadow: 0 1px 0 var(--border-strong);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  /* Theme switch (ThemeToggle): a short cross-fade between the two snapshots. */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 240ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

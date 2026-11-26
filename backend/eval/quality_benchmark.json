@@ -1,0 +1,82 @@
+[
+  {
+    "id": "Q1",
+    "statement": "The system shall respond appropriately to a loan status request.",
+    "acceptance_criteria": ["Response returned within 3 seconds."],
+    "business_justification": "Improves customer experience.",
+    "source_excerpt": "Customers want to check their status.",
+    "expected_issue_types": ["ambiguity"]
+  },
+  {
+    "id": "Q2",
+    "statement": "The system approves loans under the auto-approval limit automatically.",
+    "acceptance_criteria": ["Decision recorded with model version and score."],
+    "business_justification": "Speeds up low-risk approvals.",
+    "source_excerpt": "If it's under the limit, just approve it automatically.",
+    "expected_issue_types": ["ambiguity"]
+  },
+  {
+    "id": "Q3",
+    "statement": "The system shall disburse the loan within 2 business days.",
+    "acceptance_criteria": [],
+    "business_justification": "",
+    "source_excerpt": "Money should go out within 2 days.",
+    "expected_issue_types": ["incompleteness"]
+  },
+  {
+    "id": "Q4",
+    "statement": "The system shall log every KYC decision with a timestamp.",
+    "acceptance_criteria": ["Log entry created for every decision."],
+    "business_justification": "Supports audit and inspection.",
+    "source_excerpt": "",
+    "expected_issue_types": ["missing_source"]
+  },
+  {
+    "id": "Q5",
+    "statement": "The system shall sync applicant data with the LOS before final approval.",
+    "acceptance_criteria": ["Sync completes before approval step runs."],
+    "business_justification": "Keeps origination systems consistent.",
+    "source_excerpt": "We need this to talk to the LOS.",
+    "expected_issue_types": ["undefined_terminology"]
+  },
+  {
+    "id": "Q6",
+    "statement": "The system shall achieve 100% accuracy in fraud detection within 2 seconds.",
+    "acceptance_criteria": ["Every fraudulent transaction is caught."],
+    "business_justification": "Eliminates fraud losses.",
+    "source_excerpt": "We want zero fraud getting through.",
+    "expected_issue_types": ["infeasibility"]
+  },
+  {
+    "id": "Q7",
+    "statement": "The system shall handle exceptions in a timely manner.",
+    "acceptance_criteria": [],
+    "business_justification": "",
+    "source_excerpt": "",
+    "expected_issue_types": ["ambiguity", "incompleteness", "missing_source", "not_testable"]
+  },
+  {
+    "id": "Q8",
+    "statement": "The system shall require step-up authentication for a registered-contact change.",
+    "acceptance_criteria": ["Second factor required before the change is saved."],
+    "business_justification": "Prevents account takeover.",
+    "source_excerpt": "Changing your phone number should need a second factor.",
+    "expected_issue_types": []
+  },
+  {
+    "id": "Q9",
+    "statement": "The system shall retain completed loan records for at least 7 years.",
+    "acceptance_criteria": ["Records are queryable by loan ID for 7 years post-closure."],
+    "business_justification": "Meets audit retention obligations.",
+    "source_excerpt": "We keep records for at least seven years.",
+    "expected_issue_types": []
+  },
+  {
+    "id": "Q10",
+    "statement": "The system shall reject applications efficiently and provide reasonable feedback.",
+    "acceptance_criteria": [],
+    "business_justification": "",
+    "source_excerpt": "Rejections should be quick and make sense.",
+    "expected_issue_types": ["ambiguity", "incompleteness", "not_testable"]
+  }
+]

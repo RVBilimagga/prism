@@ -1,0 +1,12 @@
+{
+  "_note": "Project profile for building FinReq itself (the four factors derived from requirements come from running FinReq over the problem statement). Values 0-1. Evidence for each value is in docs/SDLC.md.",
+  "complexity": 0.6,
+  "change_frequency": 0.8,
+  "continuous_delivery": 0.3,
+  "stakeholder_availability": 0.9,
+  "formal_verification": 0.6,
+  "failure_consequence": 0.3,
+  "schedule_pressure": 0.8,
+  "technical_uncertainty": 0.8,
+  "documentation_needs": 0.9
+}

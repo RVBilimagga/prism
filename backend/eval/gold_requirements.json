@@ -1,0 +1,23 @@
+{
+  "transcript": "data/fixtures/loan_officer_interview.txt",
+  "stakeholder_role": "loan_officer",
+  "domain_tag": "LOAN",
+  "requirements": [
+    {"id": "G1", "statement": "The system shall require KYC verification (ID and address match) before allowing loan application submission.", "categories": ["regulatory", "functional"], "regulatory_relevant": true},
+    {"id": "G2", "statement": "The system shall route an applicant to manual compliance review after two failed automated KYC checks.", "categories": ["regulatory", "operational_maintenance"], "regulatory_relevant": true},
+    {"id": "G3", "statement": "The system shall automatically approve a loan application when the amount is below the auto-approval limit and the risk score is acceptable, without human review.", "categories": ["functional", "business"], "regulatory_relevant": false},
+    {"id": "G4", "statement": "The system shall route applications above the auto-approval limit, or flagged by the fraud model, to a credit officer for manual review.", "categories": ["functional", "business"], "regulatory_relevant": false},
+    {"id": "G5", "statement": "The system shall allow a credit officer to override the automated credit decision and shall require the officer to record a justification for the override.", "categories": ["functional", "audit_reporting"], "regulatory_relevant": true},
+    {"id": "G6", "statement": "The system shall provide the applicant with the specific reason(s) for a loan rejection in writing before finalizing the rejection.", "categories": ["regulatory", "functional"], "regulatory_relevant": true},
+    {"id": "G7", "statement": "The system shall disburse the approved loan amount only to a bank account registered in the applicant's own name.", "categories": ["regulatory", "functional"], "regulatory_relevant": true},
+    {"id": "G8", "statement": "The system shall require step-up (second-factor) authentication before allowing a change to a customer's registered bank account or phone number.", "categories": ["security"], "regulatory_relevant": true},
+    {"id": "G9", "statement": "The system shall notify both the old and new contact channel when a customer's registered bank account or phone number is changed.", "categories": ["security", "usability"], "regulatory_relevant": true},
+    {"id": "G10", "statement": "The system shall require compliance officer sign-off before onboarding a politically exposed person.", "categories": ["regulatory"], "regulatory_relevant": true},
+    {"id": "G11", "statement": "The system shall maintain an audit trail recording the data used, the credit model's decision, and the identity and timestamp of every approval or rejection.", "categories": ["audit_reporting"], "regulatory_relevant": true},
+    {"id": "G12", "statement": "The system shall return an automated credit decision within 5 seconds for auto-approved applications.", "categories": ["performance"], "regulatory_relevant": false},
+    {"id": "G13", "statement": "The system shall update the application status visible to the customer within 1 minute of a manual reviewer's action.", "categories": ["performance", "usability"], "regulatory_relevant": false},
+    {"id": "G14", "statement": "The system shall retain completed loan records for a minimum of 7 years for audit purposes, independent of a customer data-deletion request.", "categories": ["data_management", "audit_reporting"], "regulatory_relevant": true},
+    {"id": "G15", "statement": "The system shall integrate with the existing core banking system for loan disbursement.", "categories": ["integration"], "regulatory_relevant": false},
+    {"id": "G16", "statement": "The system shall integrate with the existing CRM system for customer records.", "categories": ["integration"], "regulatory_relevant": false}
+  ]
+}

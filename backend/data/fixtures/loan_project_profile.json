@@ -1,0 +1,12 @@
+{
+  "_note": "Example project profile for the digital loan-origination system described in loan_officer_interview.txt. Values 0-1; factors not listed here are derived from the extracted requirements or stay neutral (0.5).",
+  "complexity": 0.7,
+  "change_frequency": 0.6,
+  "continuous_delivery": 0.7,
+  "stakeholder_availability": 0.6,
+  "formal_verification": 0.6,
+  "failure_consequence": 0.9,
+  "schedule_pressure": 0.6,
+  "technical_uncertainty": 0.4,
+  "documentation_needs": 0.8
+}
