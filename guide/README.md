@@ -452,19 +452,19 @@ This folder is a starting point for reading the project. It contains a visual ex
 | [index.html](index.html) | Interactive explainer. Open it in a browser. <br><img src="images/guide-explainer.png" alt="Thumbnail of the guide explainer page" width="480"> |
 | [rishith.md](rishith.md) | Clickable code map. Each link opens the file at the line it describes. |
 | [flowchart.md](flowchart.md) | Mermaid diagrams of the analysis flow, the agents and the approval path. |
-| [open_all.ps1](open_all.ps1) | Opens the key project files, then the explainer in the browser. |
+| [open_all.bat](open_all.bat) | Opens the key project files, then the explainer in the browser. |
 | [images/](images/) | Screenshots used in this README. |
 
 To open everything in one step, run from the repository root:
 
-```powershell
-powershell -ExecutionPolicy Bypass -File guide\open_all.ps1
+```bat
+guideopen_all.bat
 ```
 
 The script opens the project folder and the key files in VS Code as tabs, so the links in `rishith.md` work. If `code` is not on the PATH, each file opens in its default application. Flags:
 
-- `-NoBrowser` skips opening `index.html`.
-- `-NoCode` opens files with their default applications even when VS Code is available.
+- `/nobrowser` skips opening `index.html`.
+- `/nocode` opens files with their default applications even when VS Code is available.
 
 ---
 
