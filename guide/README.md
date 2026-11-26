@@ -458,7 +458,7 @@ This folder is a starting point for reading the project. It contains a visual ex
 To open everything in one step, run from the repository root:
 
 ```bat
-guideopen_all.bat
+guide\open_all.bat
 ```
 
 The script opens the project folder and the key files in VS Code as tabs, so the links in `rishith.md` work. If `code` is not on the PATH, each file opens in its default application. Flags:
